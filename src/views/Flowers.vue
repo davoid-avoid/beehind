@@ -76,7 +76,7 @@ export default {
   height: 20px;
   margin: 0 auto;
   position: relative;
-  top: 50%;
+  top: calc(50% - 10px);
 }
 
 #flower-field {
@@ -123,6 +123,5 @@ export default {
   height: 100%;
   background-color: orange;
   position: absolute;
-  top: 50%;
 }
 </style>
