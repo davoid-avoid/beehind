@@ -39,7 +39,7 @@ export default {
   methods: {
     generateFlowers: function (amount) {
       let array = []
-      let averageRotation = 360/amount
+      let averageRotation = 360 / amount
       console.log(averageRotation)
       let heldRotation = 0
       for (let i = 0; i < amount; i++) {
@@ -48,10 +48,7 @@ export default {
         flower.distance = Math.floor(Math.random() * (this.maxRange - this.minRange)) + this.minRange
 
         let angleCalc = (Math.floor(Math.random() * averageRotation) + 20)
-        console.log(angleCalc + " angle calc")
         flower.angle = angleCalc + heldRotation
-
-        console.log(heldRotation + " held rotation")
         heldRotation += angleCalc
 
         flower.type = this.flowerTypes[Math.floor(Math.random() * (this.flowerTypes.length))]

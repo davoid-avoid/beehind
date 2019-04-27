@@ -37,14 +37,14 @@ export default {
     }
   },
   methods: {
-    showFlowers: function() {
+    showFlowers: function () {
       this.showingFlowers = !this.showingFlowers
     }
   },
   created () {
     console.log(this.flowers)
   }
-};
+}
 </script>
 
 <style>
