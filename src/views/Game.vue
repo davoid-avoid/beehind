@@ -25,8 +25,8 @@ export default {
       flowerAmount: Number,
       chosenFlower: {},
       flowerMin: 8,
-      flowerMax: 12,
-      maxRange: 5,
+      flowerMax: 11,
+      maxRange: 4,
       minRange: 1,
       flowerTypes: ['lilac', 'rose', 'daisy', 'tulip']
     }
@@ -39,12 +39,25 @@ export default {
   methods: {
     generateFlowers: function (amount) {
       let array = []
+      let averageRotation = 360/amount
+      console.log(averageRotation)
+      let heldRotation = 0
       for (let i = 0; i < amount; i++) {
         let flower = {}
+
         flower.distance = Math.floor(Math.random() * (this.maxRange - this.minRange)) + this.minRange
-        flower.angle = Math.floor(Math.random() * 359)
+
+        let angleCalc = (Math.floor(Math.random() * averageRotation) + 20)
+        console.log(angleCalc + " angle calc")
+        flower.angle = angleCalc + heldRotation
+
+        console.log(heldRotation + " held rotation")
+        heldRotation += angleCalc
+
         flower.type = this.flowerTypes[Math.floor(Math.random() * (this.flowerTypes.length))]
-        flower.identifier = i;
+
+        flower.identifier = i
+
         array.push(flower)
       }
       return array
