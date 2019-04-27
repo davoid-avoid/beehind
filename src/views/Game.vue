@@ -25,9 +25,9 @@ export default {
       flowerAmount: Number,
       chosenFlower: {},
       flowerMin: 8,
-      flowerMax: 18,
-      maxRange: 30,
-      minRange: 10,
+      flowerMax: 12,
+      maxRange: 5,
+      minRange: 1,
       flowerTypes: ['lilac', 'rose', 'daisy', 'tulip']
     }
   },
@@ -44,6 +44,7 @@ export default {
         flower.distance = Math.floor(Math.random() * (this.maxRange - this.minRange)) + this.minRange
         flower.angle = Math.floor(Math.random() * 359)
         flower.type = this.flowerTypes[Math.floor(Math.random() * (this.flowerTypes.length))]
+        flower.identifier = i;
         array.push(flower)
       }
       return array

@@ -8,7 +8,7 @@
     <span class='buttonFlower' v-if="showingFlowers" v-on:click="showFlowers">Click to Hide All Flowers ( {{ flowers.length }} )</span>
     <span v-if="showingFlowers">
       <div v-bind:key="flower.angle" v-for="flower in flowers">
-        <br>{{ flower.type }}, {{ flower.distance }} units, {{ flower.angle }} degrees<br>
+        <br>id: {{ flower.identifier }}, {{ flower.type }}, {{ flower.distance }} units, {{ flower.angle }} degrees<br>
       </div>
     </span>
   </div>

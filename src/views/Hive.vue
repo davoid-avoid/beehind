@@ -6,6 +6,7 @@
     <br><br>
     Info for Dance:
     <br>
+    id: {{ flowerInfo.identifier }},
     distance: {{ flowerInfo.distance }} units,
     angle: {{ flowerInfo.angle }} degrees,
     type: {{ flowerInfo.type  }}
