@@ -38,8 +38,8 @@ export default {
   },
   methods: {
     leave: function (el, done) {
-      this.startedGame = true;
-    },
+      this.startedGame = true
+    }
   }
 }
 </script>

@@ -3,21 +3,29 @@
     <img src="../assets/hive-01.png">
     <br><br>
     This is the Hive View
+    <br><br>
+    Info for Dance:
+    <br>
+    distance: {{ flowerInfo.distance }} units,
+    angle: {{ flowerInfo.angle }} degrees,
+    type: {{ flowerInfo.type  }}
   </div>
 </template>
 
 <script>
-import { EventBus } from './../services/event-bus.js'
 export default {
   name: 'Hive',
   components: {
 
   },
   props: {
-
+    flowerInfo: Object
   },
   methods: {
 
+  },
+  created () {
+    console.log(this.flowerInfo)
   }
 }
 </script>

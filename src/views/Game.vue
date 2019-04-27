@@ -2,17 +2,16 @@
   <div id="game">
     <div class='game-wrapper'>
       <div class='left-content'>
-        <Hive/>
+        <Hive :flowerInfo="chosenFlower"/>
       </div>
       <div class='right-content'>
-        <Flowers/>
+        <Flowers :flowers="flowerLocations"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { EventBus } from './../services/event-bus.js'
 import Hive from './Hive'
 import Flowers from './Flowers'
 export default {
@@ -26,32 +25,28 @@ export default {
       flowerAmount: Number,
       chosenFlower: {},
       flowerMin: 8,
-      flowerMax: 1500,
+      flowerMax: 18,
       maxRange: 30,
       minRange: 10,
-      flowerTypes: ["lilac", "rose", "daisy", "tulip"]
+      flowerTypes: ['lilac', 'rose', 'daisy', 'tulip']
     }
   },
   created () {
     this.flowerAmount = Math.floor(Math.random() * (this.flowerMax - this.flowerMin)) + this.flowerMin
     this.flowerLocations = this.generateFlowers(this.flowerAmount)
     this.chosenFlower = this.chooseFlower()
-
-    console.log(this.flowerLocations)
-    console.log(this.chosenFlower)
   },
   methods: {
     generateFlowers: function (amount) {
       let array = []
-      for (let i = 0; i < amount; i++){
-        let flower = {};
+      for (let i = 0; i < amount; i++) {
+        let flower = {}
         flower.distance = Math.floor(Math.random() * (this.maxRange - this.minRange)) + this.minRange
         flower.angle = Math.floor(Math.random() * 359)
         flower.type = this.flowerTypes[Math.floor(Math.random() * (this.flowerTypes.length))]
         array.push(flower)
-        console.log(flower)
       }
-      return array;
+      return array
     },
     chooseFlower: function () {
       let chosenFlowerNumber = Math.floor(Math.random() * (this.flowerLocations.length - 1))
