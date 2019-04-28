@@ -56,7 +56,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 
 .buttonFlower {
@@ -74,11 +73,11 @@ export default {
 }
 
 .beehive {
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
   margin: 0 auto;
   position: relative;
-  top: calc(50% - 10px);
+  top: calc(50% - 20px);
 }
 
 #flower-field {

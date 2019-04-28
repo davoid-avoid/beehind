@@ -25,7 +25,7 @@ export default {
       flowerAmount: Number,
       chosenFlower: {},
       flowerMin: 8,
-      flowerMax: 11,
+      flowerMax: 12,
       maxRange: 4,
       minRange: 1,
       flowerTypes: ['lilac', 'rose', 'daisy', 'tulip']
