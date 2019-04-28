@@ -24,8 +24,8 @@ export default {
       flowerLocations: [],
       flowerAmount: Number,
       chosenFlower: {},
-      flowerMin: 8,
-      flowerMax: 12,
+      flowerMin: 30,
+      flowerMax: 40,
       maxRange: 4,
       minRange: 1,
       flowerTypes: ['lilac', 'rose', 'daisy', 'tulip']
@@ -44,9 +44,7 @@ export default {
       for (let i = 0; i < amount; i++) {
         let flower = {}
 
-        flower.distance = Math.floor(Math.random() * (this.maxRange - this.minRange)) + this.minRange
-
-        let angleCalc = (Math.floor(Math.random() * averageRotation) + 20)
+        let angleCalc = (Math.floor(Math.random() * averageRotation) + 30)
         flower.angle = angleCalc + heldRotation
         heldRotation += angleCalc
 
@@ -54,7 +52,12 @@ export default {
 
         flower.identifier = i
 
-        array.push(flower)
+        let circles = Math.floor(heldRotation / 360)
+        flower.distance = this.minRange * (circles + 1)
+
+        if (flower.distance < this.maxRange) {
+          array.push(flower)
+        }
       }
       return array
     },
