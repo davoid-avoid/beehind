@@ -3,9 +3,11 @@
     <!--<img src="../assets/flower-01.png">-->
     <div id='flower-field'>
       <div class='beehive'>
-        <div v-bind:key="flower.identifier" v-for="flower in flowers">
-          <div class='flower-holder' v-bind:style="{height: (flower.distance * 60) + 'px', transform: 'rotate(' + flower.angle + 'deg)'}">
-            <div class='flower' v-bind:style="{transform: 'rotate(-' + flower.angle + 'deg)'}" v-bind:class="[flower.type]"></div>
+        <div id='flower-origin'>
+          <div v-bind:key="flower.identifier" v-for="flower in flowers">
+            <div class='flower-holder' v-bind:style="{height: (flower.distance * 60) + 'px', transform: 'rotate(' + flower.angle + 'deg)'}">
+              <div class='flower' v-bind:style="{transform: 'rotate(-' + flower.angle + 'deg)'}" v-bind:class="[flower.type]"></div>
+            </div>
           </div>
         </div>
       <div class='beehive-visible'></div>
@@ -87,12 +89,19 @@ export default {
   background-color: green;
 }
 
+#flower-origin {
+  left: 50%;
+  top: 50%;
+  position: relative;
+}
+
 .flower-holder {
-  width: 20px;
+  width: 1px;
   margin: 0 auto;
   position: absolute;
   transform-origin: bottom center;
   bottom: 0;
+  background-color: black;
 }
 
 .flower {
@@ -100,6 +109,7 @@ export default {
   height: 20px;
   position: relative;
   top: 0;
+  left: -10px;
 }
 
 .lilac {
