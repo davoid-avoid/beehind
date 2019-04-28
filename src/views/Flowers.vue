@@ -6,7 +6,7 @@
         <div id='flower-origin'>
           <div v-bind:key="flower.identifier" v-for="flower in flowers">
             <div class='flower-holder' v-bind:style="{height: (flower.distance * 60) + 'px', transform: 'rotate(' + flower.angle + 'deg)'}">
-              <div class='flower' v-bind:style="{transform: 'rotate(-' + flower.angle + 'deg)'}" v-bind:class="[flower.type]"></div>
+              <div class='flower' v-bind:style="{transform: 'rotate(-' + flower.angle + 'deg)'}" v-bind:class="[flower.type]" v-on:click="checkFlower(flower.identifier)"></div>
             </div>
           </div>
         </div>
@@ -31,7 +31,8 @@ export default {
   name: 'Flowers',
   components: {},
   props: {
-    flowers: Array
+    flowers: Array,
+    chosenFlower: Object
   },
   data () {
     return {
@@ -41,10 +42,17 @@ export default {
   methods: {
     showFlowers: function () {
       this.showingFlowers = !this.showingFlowers
+    },
+    checkFlower: function (identifier) {
+      if (this.chosenFlower.identifier === identifier) {
+        console.log('correct flower chosen')
+      } else {
+        console.log('incorrect flower chosen')
+      }
     }
   },
   created () {
-    console.log(this.flowers)
+
   }
 }
 </script>
@@ -109,6 +117,7 @@ export default {
   position: relative;
   top: 0;
   left: -10px;
+  cursor: pointer;
 }
 
 .lilac {
@@ -125,6 +134,22 @@ export default {
 
 .rose {
   background-color: red;
+}
+
+.lilac:hover {
+    background-color: #e6e0ee;
+}
+
+.daisy:hover {
+  background-color: #ffffd8;
+}
+
+.tulip:hover {
+  background-color: #ce00ce;
+}
+
+.rose:hover {
+  background-color: #ffc4c4;
 }
 
 .beehive-visible {

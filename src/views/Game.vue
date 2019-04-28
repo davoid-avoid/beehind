@@ -5,7 +5,7 @@
         <Hive :flowerInfo="chosenFlower"/>
       </div>
       <div class='right-content'>
-        <Flowers :flowers="flowerLocations"/>
+        <Flowers :flowers="flowerLocations" :chosenFlower="chosenFlower"/>
       </div>
     </div>
   </div>
@@ -40,7 +40,6 @@ export default {
     generateFlowers: function (amount) {
       let array = []
       let averageRotation = 360 / amount
-      console.log(averageRotation)
       let heldRotation = 0
       for (let i = 0; i < amount; i++) {
         let flower = {}
