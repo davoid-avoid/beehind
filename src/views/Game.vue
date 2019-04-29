@@ -22,17 +22,14 @@ export default {
   data () {
     return {
       flowerLocations: [],
-      flowerAmount: Number,
       chosenFlower: {},
-      flowerMin: 60,
-      flowerMax: 70,
-      maxRange: 4,
+      flowerAmount: 100,
+      maxRange: 5,
       minRange: 1,
       flowerTypes: ['lilac', 'rose', 'daisy', 'tulip']
     }
   },
   created () {
-    this.flowerAmount = Math.floor(Math.random() * (this.flowerMax - this.flowerMin)) + this.flowerMin
     this.flowerLocations = this.generateFlowers(this.flowerAmount)
     this.chosenFlower = this.chooseFlower()
   },

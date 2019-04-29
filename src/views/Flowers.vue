@@ -5,7 +5,7 @@
       <div class='beehive'>
         <div id='flower-origin'>
           <div v-bind:key="flower.identifier" v-for="flower in flowers">
-            <div class='flower-holder' v-bind:style="{height: (flower.distance * 60) + 'px', transform: 'rotate(' + flower.angle + 'deg)'}">
+            <div class='flower-holder' v-bind:style="{height: (flower.distance * 48) + 'px', transform: 'rotate(' + flower.angle + 'deg)'}">
               <div class='flower' v-bind:style="{transform: 'rotate(-' + flower.angle + 'deg)'}" v-bind:class="[flower.type]" v-on:click="checkFlower(flower.identifier)"></div>
             </div>
           </div>
@@ -81,11 +81,11 @@ export default {
 }
 
 .beehive {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   margin: 0 auto;
   position: relative;
-  top: calc(50% - 20px);
+  top: calc(50% - 15px);
 }
 
 #flower-field {
