@@ -44,7 +44,8 @@ export default {
       for (let i = 0; i < amount; i++) {
         let flower = {}
 
-        let angleCalc = (Math.floor(Math.random() * averageRotation) + 30)
+        let angleCalc = (Math.floor(Math.random() * (30 + averageRotation)) + 30)
+        console.log(angleCalc)
         flower.angle = angleCalc + heldRotation
         heldRotation += angleCalc
 

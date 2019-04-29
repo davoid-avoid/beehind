@@ -103,7 +103,7 @@ export default {
 }
 
 .flower-holder {
-  width: 1px;
+  width: 0px;
   margin: 0 auto;
   position: absolute;
   transform-origin: bottom center;
