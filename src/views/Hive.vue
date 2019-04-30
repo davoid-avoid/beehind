@@ -44,9 +44,10 @@ export default {
         { x: 155, y: 90 },
         { x: 145, y: 80 },
         { x: 155, y: 70 },
-        { x: 150, y: 60 },
+        { x: 150, y: 30 },
         { x: 80, y: 90 },
         { x: 80, y: 160 },
+        { x: 150, y: 200 },
         { x: 150, y: 170 },
         { x: 145, y: 160 },
         { x: 155, y: 150 },
@@ -58,7 +59,7 @@ export default {
         { x: 155, y: 90 },
         { x: 145, y: 80 },
         { x: 155, y: 70 },
-        { x: 150, y: 60 },
+        { x: 150, y: 30 },
         { x: 220, y: 90 },
         { x: 220, y: 160 },
         { x: 150, y: 200 }
@@ -101,7 +102,7 @@ export default {
 #hive-interior {
   background-color: black;
   width: 300px;
-  height: 300px;
+  height: 230px;
   overflow: hidden;
   position: relative;
   margin: 0 auto;
