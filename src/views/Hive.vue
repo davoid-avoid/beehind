@@ -1,7 +1,9 @@
 <template>
   <div id="hive">
-    <div id="bee-container">
-      <div id="bee" ref="bee"></div>
+    <div id="hive-interior">
+      <div id="bee-container" v-bind:style="{transform: 'rotate(' + flowerInfo.angle + 'deg)'}">
+        <div id="bee" ref="bee"></div>
+      </div>
     </div>
     <br><br>
     This is the Hive View
@@ -31,41 +33,42 @@ export default {
 
     function getPoints () {
       return [
-        { x: 150, y: 150 },
-        { x: 160, y: 145 },
-        { x: 170, y: 155 },
-        { x: 180, y: 145 },
-        { x: 190, y: 155 },
-        { x: 200, y: 145 },
-        { x: 210, y: 155 },
-        { x: 220, y: 145 },
-        { x: 230, y: 155 },
-        { x: 240, y: 150 },
-        { x: 260, y: 150 },
-        { x: 230, y: 90 },
-        { x: 160, y: 90 },
-        { x: 130, y: 150 },
-        { x: 150, y: 150 },
-        { x: 160, y: 145 },
-        { x: 170, y: 155 },
-        { x: 180, y: 145 },
-        { x: 190, y: 155 },
-        { x: 200, y: 145 },
-        { x: 210, y: 155 },
-        { x: 220, y: 145 },
-        { x: 230, y: 155 },
-        { x: 240, y: 150 },
-        { x: 260, y: 150 },
-        { x: 230, y: 210 },
-        { x: 160, y: 210 },
-        { x: 130, y: 150 }
+        { x: 150, y: 170 },
+        { x: 145, y: 160 },
+        { x: 155, y: 150 },
+        { x: 145, y: 140 },
+        { x: 155, y: 130 },
+        { x: 145, y: 120 },
+        { x: 155, y: 110 },
+        { x: 145, y: 100 },
+        { x: 155, y: 90 },
+        { x: 145, y: 80 },
+        { x: 155, y: 70 },
+        { x: 150, y: 60 },
+        { x: 80, y: 90 },
+        { x: 80, y: 160 },
+        { x: 150, y: 170 },
+        { x: 145, y: 160 },
+        { x: 155, y: 150 },
+        { x: 145, y: 140 },
+        { x: 155, y: 130 },
+        { x: 145, y: 120 },
+        { x: 155, y: 110 },
+        { x: 145, y: 100 },
+        { x: 155, y: 90 },
+        { x: 145, y: 80 },
+        { x: 155, y: 70 },
+        { x: 150, y: 60 },
+        { x: 220, y: 90 },
+        { x: 220, y: 160 },
+        { x: 150, y: 200 }
       ]
     }
 
     function createNewTween () {
       var progress = beeTween.progress() + 0.01 || 0
       beeTween.progress(0).kill()
-      TweenMax.set(bee, { x: 130, y: 150, rotation: 0 })
+      TweenMax.set(bee, { x: 150, y: 200, rotation: 0 })
       beeTween = new TweenMax(bee, 3, {
         bezier: {
           values: getPoints(),
@@ -95,10 +98,18 @@ export default {
   margin-top: 60px;
 }
 
-#bee-container {
+#hive-interior {
   background-color: black;
   width: 300px;
   height: 300px;
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto;
+}
+
+#bee-container {
+  width: 300px;
+  height: 230px;
   overflow: hidden;
   position: relative;
   margin: 0 auto;
