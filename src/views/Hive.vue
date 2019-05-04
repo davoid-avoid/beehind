@@ -79,7 +79,7 @@ export default {
         repeat: -1
       })
       beeTween.progress(progress)
-      beeTween.duration(6)
+      beeTween.duration(7)
     }
 
     createNewTween()

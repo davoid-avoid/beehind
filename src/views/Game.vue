@@ -48,7 +48,7 @@ export default {
 
         let angleCalc = Math.floor((Math.floor(Math.random() * (30 + averageRotation)) + 30) / (circles + 1))
 
-        flower.angle = angleCalc + heldRotation
+        flower.angle = (angleCalc + heldRotation) - (360 * circles)
         heldRotation += angleCalc
 
         flower.type = this.flowerTypes[Math.floor(Math.random() * (this.flowerTypes.length))]
