@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { EventBus } from './../services/event-bus.js'
 export default {
   name: 'Flowers',
   components: {},
@@ -45,9 +46,10 @@ export default {
     },
     checkFlower: function (identifier) {
       if (this.chosenFlower.identifier === identifier) {
-        console.log('correct flower chosen')
+        alert('correct flower chosen')
+        EventBus.$emit('resetGame', 'reset')
       } else {
-        console.log('incorrect flower chosen')
+        alert('incorrect flower chosen')
       }
     }
   },
@@ -136,6 +138,10 @@ export default {
   background-color: red;
 }
 
+.sunflower {
+  background-color: orange;
+}
+
 .lilac:hover {
     background-color: #e6e0ee;
 }
@@ -150,6 +156,10 @@ export default {
 
 .rose:hover {
   background-color: #ffc4c4;
+}
+
+.sunflower {
+  background-color: orange;
 }
 
 .beehive-visible {

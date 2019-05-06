@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { EventBus } from './../services/event-bus.js'
 import Hive from './Hive'
 import Flowers from './Flowers'
 export default {
@@ -26,12 +27,18 @@ export default {
       flowerAmount: 100,
       maxRange: 5,
       minRange: 1,
-      flowerTypes: ['lilac', 'rose', 'daisy', 'tulip']
+      flowerTypes: ['lilac', 'rose', 'daisy', 'tulip', 'sunflower']
     }
   },
   created () {
     this.flowerLocations = this.generateFlowers(this.flowerAmount)
     this.chosenFlower = this.chooseFlower()
+
+    EventBus.$on('resetGame', reset => {
+      this.flowerLocations = []
+      this.flowerLocations = this.generateFlowers(this.flowerAmount)
+      this.chosenFlower = this.chooseFlower()
+    })
   },
   methods: {
     generateFlowers: function (amount) {
@@ -46,7 +53,7 @@ export default {
           circles = Math.floor(heldRotation / 360)
         }
 
-        let angleCalc = Math.floor((Math.floor(Math.random() * (30 + averageRotation)) + 30) / (circles + 1))
+        let angleCalc = Math.floor((Math.floor(Math.random() * (80 + averageRotation)) + 80) / (circles + 1))
 
         flower.angle = (angleCalc + heldRotation) - (360 * circles)
         heldRotation += angleCalc
