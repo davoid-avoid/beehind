@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { EventBus } from './../services/event-bus.js'
 import { TweenMax, TweenLite, Linear } from 'gsap'
 export default {
   name: 'Hive',
@@ -27,60 +28,60 @@ export default {
   },
   data () {
     return {
-      x: 150,
-      y: 200
+      startX: 200,
+      startY: 300,
+      stepX: 0,
+      stepY: 0
     }
   },
   methods: {
     danceDance: function (distance) {
       let dance = []
 
-      dance.push(this.stepForwards(this.x, this.y))
-      console.log(dance)
+      this.stepX = this.startX
+      this.stepY = this.startY
 
-      for (let i = 0; i <= (distance - 1); i++){
-        this.waggle(this.x, this.y, dance, i, distance)
+      dance.push(this.stepForwards(this.stepX, this.stepY))
+
+      for (let i = 0; i <= distance - 1; i++) {
+        this.waggle(this.stepX, this.stepY, dance, i, distance)
       }
 
-      dance.push(this.stepForwards(this.x, this.y))
+      dance.push(this.stepForwards(this.stepX, this.stepY))
 
       return dance
     },
     stepForwards: function (x, y) {
-      this.y -= 30
-      return {x: this.x, y: this.y}
+      this.stepY -= 30
+      return { x: this.stepX, y: this.stepY }
     },
     waggle: function (x, y, dance, start, end) {
-      for (let j = 0; j < 2; j++){
-        if (start === 0 && j === 0){
-          this.x -= 5
+      for (let j = 0; j < 2; j++) {
+        if (start === 0 && j === 0) {
+          this.stepX -= 5
         } else {
-          this.x -= 10
+          this.stepX -= 10
         }
-        this.y -= 5
-        dance.push({x: this.x, y: this.y})
-        if (start === end && j !== 0){
-          this.x += 5
+        this.stepY -= 10
+        dance.push({ x: this.stepX, y: this.stepY })
+        if (start === end && j !== 0) {
+          this.stepX += 5
         } else {
-          this.x += 10
+          this.stepX += 10
         }
-        this.y -= 5
-        dance.push({x: this.x, y: this.y})
+        this.stepY -= 10
+        dance.push({ x: this.stepX, y: this.stepY })
       }
-    }
-  },
-  created () {},
-  mounted () {
-    //this.danceDance(this.flowerInfo.distance);
-    let beeTween = TweenMax.to({}, 0, {})
-    const { bee } = this.$refs
+    },
+    generateBeeAnim: function () {
+      let beeTween = TweenMax.to({}, 0, {})
+      const { bee } = this.$refs
 
-    let self = this;
-    function getPoints () {
-      let danceSteps = self.danceDance(self.flowerInfo.distance)
-      console.log(danceSteps)
-      return danceSteps
-      /*[
+      let self = this
+      function getPoints () {
+        let danceSteps = self.danceDance(self.flowerInfo.distance)
+        return danceSteps
+        /* [
 
         //set forward 30 pixels
         { x: 150, y: 170 },
@@ -108,7 +109,6 @@ export default {
         { x: 80, y: 90 },
         { x: 80, y: 160 },
 
-
         { x: 150, y: 200 },
         { x: 150, y: 170 },
         { x: 145, y: 160 },
@@ -127,28 +127,40 @@ export default {
         { x: 220, y: 160 },
 
         { x: 150, y: 200 }
-      ]*/
+      ] */
+      }
+
+      function createNewTween () {
+        var progress = beeTween.progress() + 0.01 || 0
+        beeTween.progress(0).kill()
+        TweenMax.set(bee, { x: 200, y: 300, rotation: 0 })
+        beeTween = new TweenMax(bee, 3, {
+          bezier: {
+            values: getPoints(),
+            autoRotate: true
+          },
+          ease: Linear.easeNone,
+          repeat: -1
+        })
+        beeTween.progress(progress)
+        beeTween.duration(5)
+      }
+
+      createNewTween()
+
+      TweenLite.set(bee, { xPercent: 50, yPercent: 50 })
     }
-
-    function createNewTween () {
-      var progress = beeTween.progress() + 0.01 || 0
-      beeTween.progress(0).kill()
-      TweenMax.set(bee, { x: 150, y: 200, rotation: 0 })
-      beeTween = new TweenMax(bee, 3, {
-        bezier: {
-          values: getPoints(),
-          autoRotate: true
-        },
-        ease: Linear.easeNone,
-        repeat: -1
-      })
-      beeTween.progress(progress)
-      beeTween.duration(18)
-    }
-
-    createNewTween()
-
-    TweenLite.set(bee, { xPercent: 50, yPercent: 50 })
+  },
+  created () {
+    EventBus.$on('resetGame', reset => {
+      let self = this
+      setTimeout(function () {
+        self.generateBeeAnim()
+      }, 5)
+    })
+  },
+  mounted () {
+    this.generateBeeAnim()
   }
 }
 </script>
@@ -160,21 +172,20 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 
 #hive-interior {
   background-color: black;
-  width: 300px;
-  height: 230px;
+  width: 400px;
+  height: 400px;
   overflow: hidden;
   position: relative;
   margin: 0 auto;
 }
 
 #bee-container {
-  width: 300px;
-  height: 230px;
+  width: 400px;
+  height: 400px;
   overflow: hidden;
   position: relative;
   margin: 0 auto;
