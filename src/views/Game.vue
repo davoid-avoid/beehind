@@ -53,7 +53,7 @@ export default {
           circles = Math.floor(heldRotation / 360)
         }
 
-        let angleCalc = Math.floor((Math.floor(Math.random() * (averageRotation * 10)) + 60) / (circles + 1))
+        let angleCalc = Math.floor((Math.floor(Math.random() * (averageRotation * 10)) + 80) / (circles + 1))
 
         let angle = (angleCalc + heldRotation) - (360 * circles)
 
