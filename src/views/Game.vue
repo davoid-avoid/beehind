@@ -1,11 +1,17 @@
 <template>
   <div id="game">
     <div class='game-wrapper'>
-      <div class='left-content'>
-        <Hive :flowerInfo="chosenFlower"/>
+      <h3>Click the flower the bee is indicating via dance</h3>
+      <div class='content-wrapper'>
+        <div class='left-content'>
+          <Hive :flowerInfo="chosenFlower"/>
+        </div>
+        <div class='right-content'>
+          <Flowers :flowers="flowerLocations" :chosenFlower="chosenFlower"/>
+        </div>
       </div>
-      <div class='right-content'>
-        <Flowers :flowers="flowerLocations" :chosenFlower="chosenFlower"/>
+      <div class="game-footer">
+        <a href="https://en.wikipedia.org/wiki/Waggle_dance" target="_blank">Info on waggle dance</a>
       </div>
     </div>
   </div>
@@ -24,7 +30,7 @@ export default {
     return {
       flowerLocations: [],
       chosenFlower: {},
-      flowerAmount: 100,
+      flowerAmount: 1,
       maxRange: 5,
       minRange: 1,
       flowerTypes: ['lilac', 'rose', 'daisy', 'tulip', 'sunflower']
@@ -35,6 +41,7 @@ export default {
     this.chosenFlower = this.chooseFlower()
 
     EventBus.$on('resetGame', reset => {
+      this.flowerAmount++
       this.flowerLocations = []
       this.flowerLocations = this.generateFlowers(this.flowerAmount)
       this.chosenFlower = this.chooseFlower()
@@ -53,7 +60,7 @@ export default {
           circles = Math.floor(heldRotation / 360)
         }
 
-        let angleCalc = Math.floor((Math.floor(Math.random() * (averageRotation * 10)) + 80) / (circles + 1))
+        let angleCalc = Math.floor((Math.floor(Math.random() * (averageRotation * 10)) + 40) / (circles + 1))
 
         let angle = (angleCalc + heldRotation) - (360 * circles)
 
@@ -93,14 +100,43 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 .game-wrapper {
+  width: 820px;
+  margin: 0 auto;
+}
+.content-wrapper {
   width: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
 }
 .left-content, .right-content {
   width: 50%;
   position: relative;
-  float: left;
+}
+.game-footer {
+  width: 100%;
+}
+
+@media screen and (max-width: 820px) {
+  .game-wrapper {
+    width: 100vw;
+    justify-content: center;
+  }
+  .content-wrapper {
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  .left-content, .right-content {
+    display: flex;
+    width: 100%;
+    position: relative;
+    float: left;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
 }
 </style>

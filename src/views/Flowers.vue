@@ -13,7 +13,7 @@
       <div class='beehive-visible'></div>
     </div>
     </div>
-    <br><br>
+    <!-- <br><br>
     This is the Flower Field View
     <br><br>
     <span class='buttonFlower' v-if="!showingFlowers" v-on:click="showFlowers">Click to Show All Flowers ( {{ flowers.length }} )</span>
@@ -22,7 +22,7 @@
       <div v-bind:key="flower.angle" v-for="flower in flowers">
         <br>id: {{ flower.identifier }}, {{ flower.type }}, {{ flower.distance }} units, {{ flower.angle }} degrees<br>
       </div>
-    </span>
+    </span> -->
   </div>
 </template>
 

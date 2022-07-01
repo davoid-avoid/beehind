@@ -5,7 +5,7 @@
         <div id="bee" ref="bee"></div>
       </div>
     </div>
-    <br><br>
+    <!-- <br><br>
     This is the Hive View
     <br><br>
     Info for Dance:
@@ -13,7 +13,7 @@
     id: {{ flowerInfo.identifier }},
     distance: {{ flowerInfo.distance }} units,
     angle: {{ flowerInfo.angle }} degrees,
-    type: {{ flowerInfo.type  }}
+    type: {{ flowerInfo.type  }} -->
   </div>
 </template>
 
@@ -43,11 +43,23 @@ export default {
 
       dance.push(this.stepForwards(this.stepX, this.stepY))
 
-      for (let i = 0; i <= distance - 1; i++) {
+      for (let i = 0; i < distance; i++) {
         this.waggle(this.stepX, this.stepY, dance, i, distance)
       }
 
       dance.push(this.stepForwards(this.stepX, this.stepY))
+
+      this.loopLeft(this.stepX, this.stepY, dance, distance)
+
+      dance.push(this.stepForwards(this.stepX, this.stepY))
+
+      for (let i = 0; i < distance; i++) {
+        this.waggle(this.stepX, this.stepY, dance, i, distance)
+      }
+
+      dance.push(this.stepForwards(this.stepX, this.stepY))
+
+      this.loopRight(this.stepX, this.stepY, dance, distance)
 
       return dance
     },
@@ -73,6 +85,17 @@ export default {
         dance.push({ x: this.stepX, y: this.stepY })
       }
     },
+    loopLeft: function (x, y, dance, distance) {
+      dance.push({ x: this.stepX -= distance * 24, y: this.stepY += (distance * 20) + 60 })
+      dance.push({ x: this.stepX = this.startX, y: this.stepY = this.startY })
+    },
+    loopRight: function (x, y, dance, distance) {
+      dance.push({ x: this.stepX += distance * 24, y: this.stepY += (distance * 20) + 60 })
+      dance.push({ x: this.stepX = this.startX, y: this.stepY = this.startY })
+    },
+    graduatedDuration: function (distance) {
+      return 4 + (distance * 2)
+    },
     generateBeeAnim: function () {
       let beeTween = TweenMax.to({}, 0, {})
       const { bee } = this.$refs
@@ -81,53 +104,6 @@ export default {
       function getPoints () {
         let danceSteps = self.danceDance(self.flowerInfo.distance)
         return danceSteps
-        /* [
-
-        //set forward 30 pixels
-        { x: 150, y: 170 },
-
-        //waggle
-        { x: 145, y: 160 },
-        { x: 155, y: 150 },
-
-        { x: 145, y: 140 },
-        { x: 155, y: 130 },
-
-        { x: 145, y: 120 },
-        { x: 155, y: 110 },
-
-        { x: 145, y: 100 },
-        { x: 155, y: 90 },
-
-        { x: 145, y: 80 },
-        { x: 155, y: 70 },
-
-        //waggle end
-        { x: 150, y: 30 },
-
-        //left side loop
-        { x: 80, y: 90 },
-        { x: 80, y: 160 },
-
-        { x: 150, y: 200 },
-        { x: 150, y: 170 },
-        { x: 145, y: 160 },
-        { x: 155, y: 150 },
-        { x: 145, y: 140 },
-        { x: 155, y: 130 },
-        { x: 145, y: 120 },
-        { x: 155, y: 110 },
-        { x: 145, y: 100 },
-        { x: 155, y: 90 },
-        { x: 145, y: 80 },
-        { x: 155, y: 70 },
-        { x: 150, y: 30 },
-
-        { x: 220, y: 90 },
-        { x: 220, y: 160 },
-
-        { x: 150, y: 200 }
-      ] */
       }
 
       function createNewTween () {
@@ -143,7 +119,7 @@ export default {
           repeat: -1
         })
         beeTween.progress(progress)
-        beeTween.duration(5)
+        beeTween.duration(self.graduatedDuration(self.flowerInfo.distance))
       }
 
       createNewTween()

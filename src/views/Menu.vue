@@ -1,31 +1,29 @@
 <template>
-  <div id="home">
-    <h1>B BOYs</h1>
-    <div class="bee-logo-wrapper">
-      <img src="../assets/bee-title.svg" class="bee-logo">
-    </div>
+  <div id="menu">
+    <h1>Choose mode!</h1>
     <br><br>
-    <button class='button' v-on:click="startGame">START WAGGLING</button>
+    <button class='button' v-on:click="startGame1">GAME 1 - CHOOSE THE FLOWER</button>
   </div>
 </template>
 
+
 <script>
 export default {
-  name: 'Home',
+  name: 'Menu',
   components: {
   },
   props: {
   },
   methods: {
-    startGame: function () {
-      this.$router.push('Menu')
+    startGame1: function () {
+      this.$router.push('Game1')
     }
   }
 }
 </script>
 
 <style>
-#home {
+#menu {
   justify-content: center;
   text-align: center;
   width: 820px;

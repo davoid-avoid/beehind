@@ -1,17 +1,8 @@
 <template>
   <div id="app">
-
-    <transition
-    name="fade"
-    v-on:after-leave="leave"
-    >
-      <Home v-if="started == false" :started="started"/>
-    </transition>
-
     <transition name="fade">
-      <Game v-if="startedGame"/>
+      <router-view></router-view>
     </transition>
-
   </div>
 </template>
 
@@ -51,13 +42,47 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  max-width: 820px;
+  margin: 0 auto;
+  max-height: 900px;
+  justify-content: center;
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+button {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  border-radius: 5px;
+  border: 0px;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
+
+body {
+  margin: 0;
+  max-height: 900px;
+  overflow-y: hidden;
+}
+
+@media screen and (max-width: 820px) {
+  body {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
+.fade-enter-active {
+  transition: top 2s;
+  position: absolute;
+  top: 0px;
+}
+.fade-leave-active {
+  transition: top 2s;
+  position: absolute;
+  top: 0px;
+}
+.fade-enter /* .fade-leave-active below version 2.1.8 */ {
+  top: 1000px;
+}
+.fade-leave-to {
+  top: -1000px;
 }
 </style>
