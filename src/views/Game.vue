@@ -41,7 +41,7 @@ export default {
     this.chosenFlower = this.chooseFlower()
 
     EventBus.$on('resetGame', reset => {
-      this.flowerAmount++
+      this.flowerAmount += 3
       this.flowerLocations = []
       this.flowerLocations = this.generateFlowers(this.flowerAmount)
       this.chosenFlower = this.chooseFlower()

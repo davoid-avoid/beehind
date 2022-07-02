@@ -1,7 +1,29 @@
 <template>
   <div id="hive">
     <div id="hive-interior">
-      <div id="bee-container" v-bind:style="{transform: 'rotate(' + flowerInfo.angle + 'deg)'}">
+      <div id="bee-audience-container">
+        <div id="audience-origin">
+          <div v-for="bee of audience" :key="bee.identifier">
+            <div
+              class="bee-audience-holder"
+              v-bind:style="{
+                height: bee.distance + 'px',
+                transform: 'rotate(' + bee.angle + 'deg)',
+              }"
+            >
+              <div
+                class="audience-bee"
+                style="transform: 'rotate(-90deg)'"
+                :ref="'audience-' + bee.identifier"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        id="bee-container"
+        v-bind:style="{ transform: 'rotate(' + flowerInfo.angle + 'deg)' }"
+      >
         <div id="bee" ref="bee"></div>
       </div>
     </div>
@@ -18,127 +40,241 @@
 </template>
 
 <script>
-import { EventBus } from './../services/event-bus.js'
-import { TweenMax, TweenLite, Linear } from 'gsap'
+import { EventBus } from "./../services/event-bus.js";
+import { TweenMax, TweenLite, Linear } from "gsap";
 export default {
-  name: 'Hive',
+  name: "Hive",
   components: {},
   props: {
-    flowerInfo: Object
+    flowerInfo: Object,
   },
-  data () {
+  data() {
     return {
       startX: 200,
       startY: 300,
       stepX: 0,
-      stepY: 0
-    }
+      stepY: 0,
+      audienceAmount: 200,
+      audience: [],
+      audienceAnimate: 0,
+    };
   },
   methods: {
     danceDance: function (distance) {
-      let dance = []
+      let dance = [];
 
-      this.stepX = this.startX
-      this.stepY = this.startY
+      this.stepX = this.startX;
+      this.stepY = this.startY;
 
-      dance.push(this.stepForwards(this.stepX, this.stepY))
-
-      for (let i = 0; i < distance; i++) {
-        this.waggle(this.stepX, this.stepY, dance, i, distance)
-      }
-
-      dance.push(this.stepForwards(this.stepX, this.stepY))
-
-      this.loopLeft(this.stepX, this.stepY, dance, distance)
-
-      dance.push(this.stepForwards(this.stepX, this.stepY))
+      dance.push(this.stepForwards(this.stepX, this.stepY));
 
       for (let i = 0; i < distance; i++) {
-        this.waggle(this.stepX, this.stepY, dance, i, distance)
+        this.waggle(this.stepX, this.stepY, dance, i, distance);
       }
 
-      dance.push(this.stepForwards(this.stepX, this.stepY))
+      dance.push(this.stepForwards(this.stepX, this.stepY));
 
-      this.loopRight(this.stepX, this.stepY, dance, distance)
+      this.loopLeft(this.stepX, this.stepY, dance, distance);
 
-      return dance
+      dance.push(this.stepForwards(this.stepX, this.stepY));
+
+      for (let i = 0; i < distance; i++) {
+        this.waggle(this.stepX, this.stepY, dance, i, distance);
+      }
+
+      dance.push(this.stepForwards(this.stepX, this.stepY));
+
+      this.loopRight(this.stepX, this.stepY, dance, distance);
+
+      return dance;
     },
     stepForwards: function (x, y) {
-      this.stepY -= 30
-      return { x: this.stepX, y: this.stepY }
+      this.stepY -= 30;
+      return { x: this.stepX, y: this.stepY };
     },
     waggle: function (x, y, dance, start, end) {
       for (let j = 0; j < 2; j++) {
         if (start === 0 && j === 0) {
-          this.stepX -= 5
+          this.stepX -= 5;
         } else {
-          this.stepX -= 10
+          this.stepX -= 10;
         }
-        this.stepY -= 10
-        dance.push({ x: this.stepX, y: this.stepY })
+        this.stepY -= 10;
+        dance.push({ x: this.stepX, y: this.stepY });
         if (start === end && j !== 0) {
-          this.stepX += 5
+          this.stepX += 5;
         } else {
-          this.stepX += 10
+          this.stepX += 10;
         }
-        this.stepY -= 10
-        dance.push({ x: this.stepX, y: this.stepY })
+        this.stepY -= 10;
+        dance.push({ x: this.stepX, y: this.stepY });
       }
     },
     loopLeft: function (x, y, dance, distance) {
-      dance.push({ x: this.stepX -= distance * 24, y: this.stepY += (distance * 20) + 60 })
-      dance.push({ x: this.stepX = this.startX, y: this.stepY = this.startY })
+      dance.push({
+        x: (this.stepX -= distance * 24),
+        y: (this.stepY += distance * 20 + 60),
+      });
+      dance.push({
+        x: (this.stepX = this.startX),
+        y: (this.stepY = this.startY),
+      });
     },
     loopRight: function (x, y, dance, distance) {
-      dance.push({ x: this.stepX += distance * 24, y: this.stepY += (distance * 20) + 60 })
-      dance.push({ x: this.stepX = this.startX, y: this.stepY = this.startY })
+      dance.push({
+        x: (this.stepX += distance * 24),
+        y: (this.stepY += distance * 20 + 60),
+      });
+      dance.push({
+        x: (this.stepX = this.startX),
+        y: (this.stepY = this.startY),
+      });
     },
     graduatedDuration: function (distance) {
-      return 4 + (distance * 2)
+      return 4 + distance * 2;
     },
     generateBeeAnim: function () {
-      let beeTween = TweenMax.to({}, 0, {})
-      const { bee } = this.$refs
+      let beeTween = TweenMax.to({}, 0, {});
+      const { bee } = this.$refs;
 
-      let self = this
-      function getPoints () {
-        let danceSteps = self.danceDance(self.flowerInfo.distance)
-        return danceSteps
+      let self = this;
+      function getPoints() {
+        let danceSteps = self.danceDance(self.flowerInfo.distance);
+        return danceSteps;
       }
 
-      function createNewTween () {
-        var progress = beeTween.progress() + 0.01 || 0
-        beeTween.progress(0).kill()
-        TweenMax.set(bee, { x: 200, y: 300, rotation: 0 })
+      function createNewTween() {
+        var progress = beeTween.progress() + 0.01 || 0;
+        beeTween.progress(0).kill();
+        TweenMax.set(bee, { x: 200, y: 300, rotation: 0 });
         beeTween = new TweenMax(bee, 3, {
           bezier: {
             values: getPoints(),
-            autoRotate: true
+            autoRotate: true,
           },
           ease: Linear.easeNone,
-          repeat: -1
-        })
-        beeTween.progress(progress)
-        beeTween.duration(self.graduatedDuration(self.flowerInfo.distance))
+          repeat: -1,
+        });
+        beeTween.progress(progress);
+        beeTween.duration(self.graduatedDuration(self.flowerInfo.distance));
       }
 
-      createNewTween()
+      createNewTween();
 
-      TweenLite.set(bee, { xPercent: 50, yPercent: 50 })
+      TweenLite.set(bee, { xPercent: 50, yPercent: 50 });
+    },
+    generateBeeAudience: function (amount) {
+      let array = [];
+      let averageRotation = 360 / amount;
+      let heldRotation = 0;
+      for (let i = 0; i < amount; i++) {
+        let bee = {};
+
+        let circles = 0;
+        if (heldRotation !== 0) {
+          circles = Math.floor(heldRotation / 360);
+        }
+
+        let angleCalc = Math.floor(
+          (Math.floor(Math.random() * (averageRotation * 10)) + 30) /
+            (circles + 1)
+        );
+
+        let angle = angleCalc + heldRotation - 360 * circles;
+
+        if (angle > 360) {
+          circles++;
+          angle = angleCalc + heldRotation - 360 * circles;
+        }
+
+        bee.angle = angle;
+        heldRotation += angleCalc;
+
+        bee.identifier = i;
+
+        bee.distance = 24 * (circles + 1) + 130;
+        array.push(bee);
+      }
+      return array;
+    },
+    animateAudienceBee(self) {
+      let audienceMember = self.$refs["audience-" + self.randomBee(self)];
+      self.shakeRandomBee(audienceMember);
+    },
+    randomBee(self) {
+      return Math.floor(Math.random() * self.audienceAmount);
+    },
+    shakeRandomBee(bee) {
+      let beeTween = TweenMax.to({}, 0, {});
+
+      function createNewTween(bee) {
+        var progress = beeTween.progress() + 0.01 || 0;
+        beeTween.progress(0).kill();
+        TweenMax.set(bee, { x: 0, y: 0, rotation: 0 });
+        beeTween = new TweenMax(bee, 3, {
+          bezier: {
+            values: [
+              { rotation: -20},
+              { rotation: 20},
+              { rotation: -20},
+              { rotation: 20},
+              { rotation: -20},
+              { rotation: 20},
+              { rotation: -20},
+              { rotation: 20},
+              { rotation: -20},
+              { rotation: 20},
+              { rotation: -20},
+              { rotation: 20},
+              { rotation: -20},
+              { rotation: 20},
+              { rotation: -20},
+              { rotation: 20},
+              { rotation: -20},
+              { rotation: 20},
+              { rotation: -20},
+              { rotation: 20},
+              { rotation: 0},
+            ],
+            autoRotate: true,
+          },
+          ease: Linear.easeNone,
+          repeat: 0,
+        });
+        beeTween.progress(progress);
+        beeTween.duration(2);
+      }
+
+      createNewTween(bee);
+
     }
   },
-  created () {
-    EventBus.$on('resetGame', reset => {
-      let self = this
+  created() {
+    EventBus.$on("resetGame", (reset) => {
+      let self = this;
+      clearInterval(this.audienceAnimate)
       setTimeout(function () {
-        self.generateBeeAnim()
-      }, 5)
-    })
+        self.generateBeeAnim();
+        self.audience = self.generateBeeAudience(self.audienceAmount);
+        self.audienceAnimate = setInterval(() => {
+          self.animateAudienceBee(self);
+        }, 100);
+      }, 5);
+    });
   },
-  mounted () {
-    this.generateBeeAnim()
+  mounted() {
+    this.generateBeeAnim();
+    this.audience = this.generateBeeAudience(this.audienceAmount);
+    let self = this;
+    clearInterval(this.audienceAnimate)
+    this.audienceAnimate = setInterval(() => {
+      self.animateAudienceBee(self);
+    }, 100);
+  },
+  beforeDestroy() {
+    clearInterval(this.audienceAnimate)
   }
-}
+};
 </script>
 
 <style>
@@ -168,12 +304,43 @@ export default {
 }
 
 #bee {
-  background: url(https://i.imgur.com/Pu0dk4y.png);
+  background: url(../assets/bee-dancer.png);
   background-size: contain;
   width: 30px;
   height: 30px;
   left: -30px;
   top: -30px;
+  position: absolute;
+}
+
+#bee-audience-container {
+  width: 400px;
+  height: 400px;
+  overflow: hidden;
+  position: absolute;
+  margin: 0 auto;
+}
+
+#audience-origin {
+  left: 50%;
+  top: 50%;
+  position: relative;
+}
+
+.bee-audience-holder {
+  width: 0px;
+  margin: 0 auto;
+  position: absolute;
+  transform-origin: bottom center;
+  bottom: 0;
+  background-color: black;
+}
+
+.audience-bee {
+  background: url(../assets/bee-audience.png);
+  background-size: contain;
+  width: 30px;
+  height: 30px;
   position: absolute;
 }
 

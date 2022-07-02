@@ -70,12 +70,12 @@ body {
 }
 
 .fade-enter-active {
-  transition: top 2s;
+  transition: top 1s;
   position: absolute;
   top: 0px;
 }
 .fade-leave-active {
-  transition: top 2s;
+  transition: top 1s;
   position: absolute;
   top: 0px;
 }
