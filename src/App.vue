@@ -9,7 +9,7 @@
 <script>
 import Home from './views/Home'
 import Game from './views/Game'
-import { EventBus } from './services/event-bus.js'
+import soundHandler from "./services/soundHandler.js";
 export default {
   name: 'App',
   components: {
@@ -17,20 +17,19 @@ export default {
   },
   data () {
     return {
-      started: false,
-      startedGame: false,
       fader: 'fade'
     }
   },
   created () {
-    EventBus.$on('startgame', started => {
-      this.started = true
-    })
+    soundHandler.createSound("./static/audio/game1.mp3", "game1", 1);
+    soundHandler.createSound("./static/audio/incorrect1.mp3", "incorrect1", 0.4);
+    soundHandler.createSound("./static/audio/incorrect2.mp3", "incorrect2", 0.4);
+    soundHandler.createSound("./static/audio/correct1.mp3", "correct1", 0.7);
+    soundHandler.createSound("./static/audio/correct2.mp3", "correct2", 0.7);
+    soundHandler.createSound("./static/audio/correct3.mp3", "correct3", 0.7);
+    soundHandler.createSound("./static/audio/maxhype.mp3", "maxhype", 1);
   },
   methods: {
-    leave: function (el, done) {
-      this.startedGame = true
-    }
   }
 }
 </script>
@@ -84,5 +83,9 @@ body {
 }
 .fade-leave-to {
   top: -1000px;
+}
+
+a {
+  text-decoration: none;
 }
 </style>

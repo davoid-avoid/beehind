@@ -7,12 +7,13 @@
     </button>
     <p>Read the bee breakdance and choose the flower the bee is directing to</p>
     <br /><br />
+    <router-link to="/" class="button">Back to Title</router-link>
+    <br /><br />
     <a href="https://en.wikipedia.org/wiki/Waggle_dance" target="_blank"
       >Info on waggle dance</a
     >
   </div>
 </template>
-
 
 <script>
 export default {
@@ -49,6 +50,7 @@ export default {
   color: white;
   cursor: pointer;
   transition: all 0.3s;
+  border-radius: 5px;
 }
 
 .button:hover {

@@ -1,32 +1,32 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home'
-import Menu from '../views/Menu'
-import Game from '../views/Game'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../views/Home";
+import Menu from "../views/Menu";
+import Game from "../views/Game";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
-    { 
-        path: '/',
-        name: 'Start',
-        component: Home
-    },
-    { 
-      path: '/Menu',
-      name: 'Menu',
-      component: Menu
+  {
+    path: "/",
+    name: "Start",
+    component: Home
   },
-    { 
-      path: '/Game1',
-      name: 'Game1',
-      component: Game
+  {
+    path: "/Menu",
+    name: "Menu",
+    component: Menu
   },
-]
+  {
+    path: "/Game1",
+    name: "Game1",
+    component: Game
+  }
+];
 
 // eslint-disable-next-line no-new
 const router = new VueRouter({
-   routes
-})
+  routes
+});
 
-export default router
+export default router;

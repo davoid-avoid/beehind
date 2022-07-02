@@ -317,7 +317,7 @@ export default {
 }
 
 #hive-interior {
-  background-image: url('../assets/comb.png');
+  background-image: url('../../static/bgs/comb.png');
   background-repeat: repeat;
   width: 400px;
   height: 400px;
@@ -335,7 +335,7 @@ export default {
 }
 
 #bee {
-  background: url(../assets/bee-dancer.png);
+  background: url('../../static/bgs/bee-dancer.png');
   background-size: contain;
   width: 30px;
   height: 30px;
@@ -368,7 +368,7 @@ export default {
 }
 
 .audience-bee {
-  background: url(../assets/bee-audience.png);
+  background: url('../../static/bgs/bee-audience.png');
   background-size: contain;
   width: 30px;
   height: 30px;

@@ -15,7 +15,9 @@
   },
   "dependencies": {
     "gsap": "^2.1.2",
+    "howler": "^2.2.3",
     "vue": "^2.5.2",
+    "vue-howler": "^0.7.0",
     "vue-router": "^3.5.4"
   },
   "devDependencies": {

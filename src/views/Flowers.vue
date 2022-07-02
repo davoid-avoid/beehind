@@ -1,6 +1,6 @@
 <template>
   <div id='flowers'>
-    <!--<img src="../assets/flower-01.png">-->
+    <!--<img src=".../../static/bgs/flower-01.png">-->
     <div id='flower-field'>
       <div class='beehive'>
         <div id='flower-origin'>
@@ -11,6 +11,9 @@
           </div>
         </div>
       <div class='beehive-visible'></div>
+    </div>
+    <div class="feedback-indicator">
+      <div :class="[ getIndicatorFeedback(), 'feedback']"></div>
     </div>
     </div>
     <!-- <br><br>
@@ -38,7 +41,9 @@ export default {
   },
   data () {
     return {
-      showingFlowers: false
+      showingFlowers: false,
+      indicator: '',
+      indicatorTimeout: 0
     }
   },
   methods: {
@@ -46,15 +51,29 @@ export default {
       this.showingFlowers = !this.showingFlowers
     },
     checkFlower: function (identifier) {
+      let self = this
       if (this.chosenFlower.identifier === identifier) {
         // alert('correct flower chosen')
         EventBus.$emit('resetGame', 'reset')
+        clearTimeout(this.indicatorTimeout)
+        this.indicator = ''
+        setTimeout(() => {
+          self.indicator = 'correct'
+        }, 1)
       } else {
         // alert('incorrect flower chosen')
         EventBus.$emit('incorrect', 'reset')
+        clearTimeout(this.indicatorTimeout)
+        this.indicator = ''
+        setTimeout(() => {
+          self.indicator = 'incorrect'
+        }, 1)
       }
+      this.indicatorTimeout = setTimeout(() => {
+        self.indicator = ''
+      }, 500)
     },
-    ifHypeMax(identifier){
+    ifHypeMax(identifier) {
       if (this.hypeMax === false) {
         return true
       } else {
@@ -63,6 +82,16 @@ export default {
         } else {
           return false
         }
+      }
+    },
+    getIndicatorFeedback() {
+      console.log(this.indicator)
+      if (this.indicator === 'correct') {
+        return 'feedback-correct'
+      } else if (this.indicator === 'incorrect') {
+        return 'feedback-incorrect'
+      } else {
+        return ''
       }
     }
   },
@@ -108,7 +137,7 @@ export default {
   height: 400px;
   position: relative;
   margin: 0 auto;
-  background-image: url('../assets/ground.png');
+  background-image: url('../../static/bgs/ground.png');
   background-repeat: repeat;
 }
 
@@ -137,49 +166,81 @@ export default {
 }
 
 .lilac {
-  background-image: url("../assets/lilac.png");
+  background-image: url("../../static/bgs/lilac.png");
 }
 
 .daisy {
-  background-image: url("../assets/daisy.png");
+  background-image: url("../../static/bgs/daisy.png");
 }
 
 .tulip {
-  background-image: url("../assets/tulip.png");
+  background-image: url("../../static/bgs/tulip.png");
 }
 
 .rose {
-  background-image: url("../assets/rose.png");
+  background-image: url("../../static/bgs/rose.png");
 }
 
 .sunflower {
-  background-image: url("../assets/sunflower.png");
+  background-image: url("../../static/bgs/sunflower.png");
 }
 
 .lilac:hover {
-  background-image: url("../assets/lilachover.png");
+  background-image: url("../../static/bgs/lilachover.png");
 }
 
 .daisy:hover {
-  background-image: url("../assets/daisyhover.png");
+  background-image: url("../../static/bgs/daisyhover.png");
 }
 
 .tulip:hover {
-  background-image: url("../assets/tuliphover.png");
+  background-image: url("../../static/bgs/tuliphover.png");
 }
 
 .rose:hover {
-  background-image: url("../assets/rosehover.png");
+  background-image: url("../../static/bgs/rosehover.png");
 }
 
 .sunflower:hover {
-  background-image: url("../assets/sunflowerhover.png");
+  background-image: url("../../static/bgs/sunflowerhover.png");
 }
 
 .beehive-visible {
   width: 100%;
   height: 100%;
-  background-image: url("../assets/hive.png");
+  background-image: url("../../static/bgs/hive.png");
   position: absolute;
+}
+
+.feedback-indicator {
+  width: 100%;
+  height: 400px;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+}
+
+.feedback {
+  width: 60px;
+  height: 60px;
+  top: 180px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.feedback-correct {
+  background-image: url("../../static/bgs/correct.png");
+  animation: upfade 0.5s 1;
+}
+
+.feedback-incorrect {
+  background-image: url("../../static/bgs/incorrect.png");
+  animation: upfade 0.5s 1;
+}
+
+@keyframes upfade {
+  0% { opacity: 1; top: 180px}
+  40% { opacity: 1; top: 180px}
+  100% { opacity: 0; top: 140px}
 }
 </style>
