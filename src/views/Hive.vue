@@ -20,6 +20,10 @@
           </div>
         </div>
       </div>
+      <div id="boombox">
+        <img src="../assets/boomboxshadow.png" class="boombox-image-shadow"/>
+        <img src="../assets/boombox.png" class="boombox-image" ref="boombox"/>
+      </div>
       <div
         id="bee-container"
         v-bind:style="{ transform: 'rotate(' + flowerInfo.angle + 'deg)' }"
@@ -47,6 +51,7 @@ export default {
   components: {},
   props: {
     flowerInfo: Object,
+    hype: Number,
   },
   data() {
     return {
@@ -131,7 +136,7 @@ export default {
       });
     },
     graduatedDuration: function (distance) {
-      return 4 + distance * 2;
+      return 4 + distance * 3;
     },
     generateBeeAnim: function () {
       let beeTween = TweenMax.to({}, 0, {});
@@ -198,8 +203,10 @@ export default {
       return array;
     },
     animateAudienceBee(self) {
-      let audienceMember = self.$refs["audience-" + self.randomBee(self)];
-      self.shakeRandomBee(audienceMember);
+      for (let i = 1; i <= Math.floor(this.hype / 4); i++) {
+        let audienceMember = self.$refs["audience-" + self.randomBee(self)];
+        self.shakeRandomBee(audienceMember);
+      }
     },
     randomBee(self) {
       return Math.floor(Math.random() * self.audienceAmount);
@@ -214,27 +221,27 @@ export default {
         beeTween = new TweenMax(bee, 3, {
           bezier: {
             values: [
-              { rotation: -20},
-              { rotation: 20},
-              { rotation: -20},
-              { rotation: 20},
-              { rotation: -20},
-              { rotation: 20},
-              { rotation: -20},
-              { rotation: 20},
-              { rotation: -20},
-              { rotation: 20},
-              { rotation: -20},
-              { rotation: 20},
-              { rotation: -20},
-              { rotation: 20},
-              { rotation: -20},
-              { rotation: 20},
-              { rotation: -20},
-              { rotation: 20},
-              { rotation: -20},
-              { rotation: 20},
-              { rotation: 0},
+              { rotation: -20 },
+              { rotation: 20 },
+              { rotation: -20 },
+              { rotation: 20 },
+              { rotation: -20 },
+              { rotation: 20 },
+              { rotation: -20 },
+              { rotation: 20 },
+              { rotation: -20 },
+              { rotation: 20 },
+              { rotation: -20 },
+              { rotation: 20 },
+              { rotation: -20 },
+              { rotation: 20 },
+              { rotation: -20 },
+              { rotation: 20 },
+              { rotation: -20 },
+              { rotation: 20 },
+              { rotation: -20 },
+              { rotation: 20 },
+              { rotation: 0 },
             ],
             autoRotate: true,
           },
@@ -246,34 +253,56 @@ export default {
       }
 
       createNewTween(bee);
+    },
+    animateBoombox() {
+      let boombox = this.$refs["boombox"];
+      let beeTween = TweenMax.to({}, 0, {});
 
+      function createNewTween(boombox) {
+        var progress = beeTween.progress() + 0.01 || 0;
+        beeTween.progress(0).kill();
+        TweenMax.set(boombox, { x: 0, y: 0, rotation: 0 });
+        beeTween = new TweenMax(boombox, 3, {
+          bezier: {
+            values: [
+              { rotation: -5, y: -20 },
+              { rotation: 0, y: 0 },
+              { rotation: 5, y: -20 },
+              { rotation: 0, y: 0 },
+            ],
+            autoRotate: true,
+          },
+          ease: Linear.easeNone,
+          repeat: -1,
+        });
+        beeTween.progress(progress);
+        beeTween.duration(1);
+      }
+
+      createNewTween(boombox);
     }
   },
   created() {
-    EventBus.$on("resetGame", (reset) => {
-      let self = this;
-      clearInterval(this.audienceAnimate)
+    EventBus.$on('resetGame', reset => {
+      let self = this
       setTimeout(function () {
-        self.generateBeeAnim();
-        self.audience = self.generateBeeAudience(self.audienceAmount);
-        self.audienceAnimate = setInterval(() => {
-          self.animateAudienceBee(self);
-        }, 100);
-      }, 5);
-    });
+        self.generateBeeAnim()
+      }, 5)
+    })
   },
   mounted() {
     this.generateBeeAnim();
     this.audience = this.generateBeeAudience(this.audienceAmount);
     let self = this;
-    clearInterval(this.audienceAnimate)
+    clearInterval(this.audienceAnimate);
     this.audienceAnimate = setInterval(() => {
       self.animateAudienceBee(self);
-    }, 100);
+    }, 600);
+    this.animateBoombox()
   },
   beforeDestroy() {
-    clearInterval(this.audienceAnimate)
-  }
+    clearInterval(this.audienceAnimate);
+  },
 };
 </script>
 
@@ -287,7 +316,8 @@ export default {
 }
 
 #hive-interior {
-  background-color: black;
+  background-image: url('../assets/comb.png');
+  background-repeat: repeat;
   width: 400px;
   height: 400px;
   overflow: hidden;
@@ -342,6 +372,27 @@ export default {
   width: 30px;
   height: 30px;
   position: absolute;
+}
+
+#boombox {
+  width: 60px;
+  height: 40px;
+  position: absolute;
+  left: 270px;
+  top: 200px;
+}
+
+.boombox-image {
+  width: 100%;
+  height: 100%;
+}
+
+.boombox-image-shadow {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0px;
+  opacity: 0.7;
 }
 
 .dot {

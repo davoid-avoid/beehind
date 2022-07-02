@@ -46,10 +46,10 @@ export default {
     },
     checkFlower: function (identifier) {
       if (this.chosenFlower.identifier === identifier) {
-        alert('correct flower chosen')
+        // alert('correct flower chosen')
         EventBus.$emit('resetGame', 'reset')
       } else {
-        alert('incorrect flower chosen')
+        // alert('incorrect flower chosen')
       }
     }
   },
@@ -95,7 +95,8 @@ export default {
   height: 400px;
   position: relative;
   margin: 0 auto;
-  background-color: green;
+  background-image: url('../assets/ground.png');
+  background-repeat: repeat;
 }
 
 #flower-origin {
@@ -123,49 +124,49 @@ export default {
 }
 
 .lilac {
-    background-color: lavender;
+  background-image: url("../assets/lilac.png");
 }
 
 .daisy {
-  background-color: yellow;
+  background-image: url("../assets/daisy.png");
 }
 
 .tulip {
-  background-color: purple
+  background-image: url("../assets/tulip.png");
 }
 
 .rose {
-  background-color: red;
+  background-image: url("../assets/rose.png");
 }
 
 .sunflower {
-  background-color: orange;
+  background-image: url("../assets/sunflower.png");
 }
 
 .lilac:hover {
-    background-color: #e6e0ee;
+  background-image: url("../assets/lilachover.png");
 }
 
 .daisy:hover {
-  background-color: #ffffd8;
+  background-image: url("../assets/daisyhover.png");
 }
 
 .tulip:hover {
-  background-color: #ce00ce;
+  background-image: url("../assets/tuliphover.png");
 }
 
 .rose:hover {
-  background-color: #ffc4c4;
+  background-image: url("../assets/rosehover.png");
 }
 
-.sunflower {
-  background-color: orange;
+.sunflower:hover {
+  background-image: url("../assets/sunflowerhover.png");
 }
 
 .beehive-visible {
   width: 100%;
   height: 100%;
-  background-color: orange;
+  background-image: url("../assets/hive.png");
   position: absolute;
 }
 </style>
