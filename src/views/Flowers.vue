@@ -6,7 +6,7 @@
         <div id='flower-origin'>
           <div v-bind:key="flower.identifier" v-for="flower in flowers">
             <div class='flower-holder' v-bind:style="{height: (flower.distance * 48) + 'px', transform: 'rotate(' + flower.angle + 'deg)'}">
-              <div class='flower' v-bind:style="{transform: 'rotate(-' + flower.angle + 'deg)'}" v-bind:class="[flower.type]" v-on:click="checkFlower(flower.identifier)"></div>
+              <div class='flower' v-if="ifHypeMax(flower.identifier)" v-bind:style="{transform: 'rotate(-' + flower.angle + 'deg)'}" v-bind:class="[flower.type]" v-on:click="checkFlower(flower.identifier)"></div>
             </div>
           </div>
         </div>
@@ -33,7 +33,8 @@ export default {
   components: {},
   props: {
     flowers: Array,
-    chosenFlower: Object
+    chosenFlower: Object,
+    hypeMax: Boolean
   },
   data () {
     return {
@@ -50,6 +51,18 @@ export default {
         EventBus.$emit('resetGame', 'reset')
       } else {
         // alert('incorrect flower chosen')
+        EventBus.$emit('incorrect', 'reset')
+      }
+    },
+    ifHypeMax(identifier){
+      if (this.hypeMax === false) {
+        return true
+      } else {
+        if (this.chosenFlower.identifier === identifier) {
+          return true
+        } else {
+          return false
+        }
       }
     }
   },

@@ -10,11 +10,15 @@
           />
         </div>
         <div class="right-content">
-          <Flowers :flowers="flowerLocations" :chosenFlower="chosenFlower" />
+          <Flowers :flowers="flowerLocations" :chosenFlower="chosenFlower" :hypeMax="hypeMax" />
         </div>
       </div>
       <div class="game-footer">
-        Hype!<br>
+        COMBO: <span :style="comboStyle">{{ combo }}</span>
+        <br><br>
+        <span v-if="!hypeMax">Hype meter</span>
+        <span v-if="hypeMax" style="font-weight: bold">MAX HYPE!</span>
+        <br>
         <div class="hype-meter">
           <div class="hype-fill" :style="'width: ' + (hypeAmount / 200 * 100) + '%'" :class="hypeMax ? 'hype-max' : ''"></div>  
         </div>
@@ -48,7 +52,9 @@ export default {
       flowerTypes: ["lilac", "rose", "daisy", "tulip", "sunflower"],
       hypeAmount: 0,
       hypeCounter: 0,
-      hypeMax: false
+      hypeMax: false,
+      combo: 0,
+      highestCombo: 0
     };
   },
   created() {
@@ -56,8 +62,12 @@ export default {
     this.chosenFlower = this.chooseFlower();
 
     EventBus.$on("resetGame", (reset) => {
-      this.flowerAmount += 3;
+      this.flowerAmount += 2;
       this.hypeAmount += 20;
+      this.combo++;
+      if (this.combo > this.highestCombo) {
+        this.highestCombo = this.combo;
+      }
       if (this.hypeAmount > 200) {
         this.hypeAmount = 200
         this.hypeMax = true
@@ -71,6 +81,34 @@ export default {
       this.flowerLocations = this.generateFlowers(this.flowerAmount);
       this.chosenFlower = this.chooseFlower();
     });
+    
+    EventBus.$on("incorrect", (reset) => {
+      this.hypeAmount -= 10
+      if (this.hypeAmount < 0) {
+        this.hypeAmount = 0;
+      }
+      this.combo = 0;
+      this.flowerAmount -= 2;
+      if (this.flowerAmount < 1) {
+        this.flowerAmount = 1;
+      }
+    })
+  },
+  computed: {
+    comboStyle() {
+      if (this.combo >= 12) {
+        return 'font-weight: bold; color: green'
+      }
+      if (this.combo >= 9) {
+        return 'font-weight: bold; color: blue'
+      }
+      if (this.combo >= 6) {
+        return 'font-weight: bold; color: red'
+      }
+      if (this.combo >= 3) {
+        return 'font-weight: bold'
+      }
+    }
   },
   methods: {
     generateFlowers: function (amount) {
@@ -136,6 +174,9 @@ export default {
   },
   beforeDestroy() {
     clearInterval(this.hypeCounter)
+    EventBus.$off('resetGame')
+    EventBus.$off("incorrect")
+
   }
 };
 </script>

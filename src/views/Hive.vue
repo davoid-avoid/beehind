@@ -302,6 +302,7 @@ export default {
   },
   beforeDestroy() {
     clearInterval(this.audienceAnimate);
+    EventBus.$off('resetGame')
   },
 };
 </script>
