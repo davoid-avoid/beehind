@@ -1,20 +1,32 @@
 <template>
-  <div id='flowers'>
+  <div id="flowers">
     <!--<img src=".../../static/bgs/flower-01.png">-->
-    <div id='flower-field'>
-      <div class='beehive'>
-        <div id='flower-origin'>
+    <div id="flower-field">
+      <div class="beehive">
+        <div id="flower-origin">
           <div v-bind:key="flower.identifier" v-for="flower in flowers">
-            <div class='flower-holder' v-bind:style="{height: (flower.distance * 48) + 'px', transform: 'rotate(' + flower.angle + 'deg)'}">
-              <div class='flower' v-if="ifHypeMax(flower.identifier)" v-bind:style="{transform: 'rotate(-' + flower.angle + 'deg)'}" v-bind:class="[flower.type]" v-on:click="checkFlower(flower.identifier)"></div>
+            <div
+              class="flower-holder"
+              v-bind:style="{
+                height: flower.distance * 48 + 'px',
+                transform: 'rotate(' + flower.angle + 'deg)',
+              }"
+            >
+              <div
+                class="flower"
+                v-if="ifHypeMax(flower.identifier)"
+                v-bind:style="{ transform: 'rotate(-' + flower.angle + 'deg)' }"
+                v-bind:class="[flower.type]"
+                v-on:click="checkFlower(flower.identifier)"
+              ></div>
             </div>
           </div>
         </div>
-      <div class='beehive-visible'></div>
-    </div>
-    <div class="feedback-indicator">
-      <div :class="[ getIndicatorFeedback(), 'feedback']"></div>
-    </div>
+        <div class="beehive-visible"></div>
+      </div>
+      <div class="feedback-indicator">
+        <div :class="[getIndicatorFeedback(), 'feedback']"></div>
+      </div>
     </div>
     <!-- <br><br>
     This is the Flower Field View
@@ -30,74 +42,75 @@
 </template>
 
 <script>
-import { EventBus } from './../services/event-bus.js'
+import { EventBus } from "./../services/event-bus.js";
 export default {
-  name: 'Flowers',
+  name: "Flowers",
   components: {},
   props: {
     flowers: Array,
     chosenFlower: Object,
-    hypeMax: Boolean
+    hypeMax: Boolean,
+    tutorialActive: Boolean,
   },
-  data () {
+  data() {
     return {
       showingFlowers: false,
-      indicator: '',
-      indicatorTimeout: 0
-    }
+      indicator: "",
+      indicatorTimeout: 0,
+    };
   },
   methods: {
     showFlowers: function () {
-      this.showingFlowers = !this.showingFlowers
+      this.showingFlowers = !this.showingFlowers;
     },
     checkFlower: function (identifier) {
-      let self = this
-      if (this.chosenFlower.identifier === identifier) {
-        // alert('correct flower chosen')
-        EventBus.$emit('resetGame', 'reset')
-        clearTimeout(this.indicatorTimeout)
-        this.indicator = ''
-        setTimeout(() => {
-          self.indicator = 'correct'
-        }, 1)
-      } else {
-        // alert('incorrect flower chosen')
-        EventBus.$emit('incorrect', 'reset')
-        clearTimeout(this.indicatorTimeout)
-        this.indicator = ''
-        setTimeout(() => {
-          self.indicator = 'incorrect'
-        }, 1)
+      if (!this.tutorialActive) {
+        let self = this;
+        if (this.chosenFlower.identifier === identifier) {
+          // alert('correct flower chosen')
+          EventBus.$emit("resetGame", "reset");
+          clearTimeout(this.indicatorTimeout);
+          this.indicator = "";
+          setTimeout(() => {
+            self.indicator = "correct";
+          }, 1);
+        } else {
+          // alert('incorrect flower chosen')
+          EventBus.$emit("incorrect", "reset");
+          clearTimeout(this.indicatorTimeout);
+          this.indicator = "";
+          setTimeout(() => {
+            self.indicator = "incorrect";
+          }, 1);
+        }
+        this.indicatorTimeout = setTimeout(() => {
+          self.indicator = "";
+        }, 500);
       }
-      this.indicatorTimeout = setTimeout(() => {
-        self.indicator = ''
-      }, 500)
     },
     ifHypeMax(identifier) {
       if (this.hypeMax === false) {
-        return true
+        return true;
       } else {
         if (this.chosenFlower.identifier === identifier) {
-          return true
+          return true;
         } else {
-          return false
+          return false;
         }
       }
     },
     getIndicatorFeedback() {
-      if (this.indicator === 'correct') {
-        return 'feedback-correct'
-      } else if (this.indicator === 'incorrect') {
-        return 'feedback-incorrect'
+      if (this.indicator === "correct") {
+        return "feedback-correct";
+      } else if (this.indicator === "incorrect") {
+        return "feedback-incorrect";
       } else {
-        return ''
+        return "";
       }
-    }
+    },
   },
-  created () {
-
-  }
-}
+  created() {},
+};
 </script>
 
 <style>
@@ -136,7 +149,7 @@ export default {
   height: 400px;
   position: relative;
   margin: 0 auto;
-  background-image: url('../../static/bgs/ground.png');
+  background-image: url("../../static/bgs/ground.png");
   background-repeat: repeat;
 }
 
@@ -238,8 +251,17 @@ export default {
 }
 
 @keyframes upfade {
-  0% { opacity: 1; top: 180px}
-  40% { opacity: 1; top: 180px}
-  100% { opacity: 0; top: 140px}
+  0% {
+    opacity: 1;
+    top: 180px;
+  }
+  40% {
+    opacity: 1;
+    top: 180px;
+  }
+  100% {
+    opacity: 0;
+    top: 140px;
+  }
 }
 </style>

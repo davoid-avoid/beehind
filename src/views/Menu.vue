@@ -5,6 +5,10 @@
       <img src="../assets/boomboxmenu.png" class="animate-boombox" />
     </div>
     <br />
+    <button class="button" v-on:click="startTutorial1">
+      HOW TO PLAY
+    </button>
+    <br><br>
     <button class="button" v-on:click="startGame1">
       GAME 1 - INTERPRETIVE DANCE
     </button>
@@ -27,6 +31,9 @@ export default {
   methods: {
     startGame1: function () {
       this.$router.push("Game1");
+    },
+    startTutorial1: function () {
+      this.$router.push("Tutorial1");
     },
   },
   mounted() {

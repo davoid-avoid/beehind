@@ -302,11 +302,18 @@ export default {
         self.startGame()
       }, 1)
     })
+    EventBus.$on('tutorialCall', reset => {
+      let self = this
+      setTimeout(function () {
+        self.generateBeeAnim()
+      }, 5)
+    })
   },
   beforeDestroy() {
     clearInterval(this.audienceAnimate);
     EventBus.$off('resetGame')
     EventBus.$off('startGame')
+    EventBus.$off('tutorialCall')
   },
 };
 </script>

@@ -16,6 +16,7 @@
             :flowers="flowerLocations"
             :chosenFlower="chosenFlower"
             :hypeMax="hypeMax"
+            :tutorialActive="tutorialActive"
           />
         </div>
         <div :class="['pre-start', preStart ? 'pre-start-visible' : '']">
@@ -89,6 +90,7 @@ export default {
       preStartText: "",
       preStartCountdown: 0,
       gameOver: false,
+      tutorialActive: false
     };
   },
   created() {
