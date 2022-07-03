@@ -1,7 +1,12 @@
 <template>
   <div id="game">
     <div class="game-wrapper">
-      <h3>Click the flower the bee is indicating via dance</h3>
+      <div v-if="!gameStart">
+        <h3>Interpretive Breakdance</h3>
+      </div>
+      <div v-if="gameStart">
+        <h3>{{ timeLeftMinutes }}</h3>
+      </div>
       <div class="content-wrapper">
         <div class="left-content">
           <Hive :flowerInfo="chosenFlower" :hype="hypeAmount" />
@@ -13,20 +18,39 @@
             :hypeMax="hypeMax"
           />
         </div>
+        <div :class="['pre-start', preStart ? 'pre-start-visible' : '']">
+          <div class="pre-start-text" v-if="preStartText !== ''">
+            {{ preStartText }}
+          </div>
+        </div>
+        <div :class="['end-game', gameOver ? 'end-game-visible' : '']">
+          <div class="end-game-text" v-if="gameOver">
+            SCORE: {{ score }}<br /><br />
+            MAX COMBO: {{ highestCombo }}
+          </div>
+        </div>
       </div>
       <div class="game-footer">
-        COMBO: <span :style="comboStyle">{{ combo }}</span> <br /><br />
-        <span v-if="!hypeMax">Hype meter</span>
-        <span v-if="hypeMax" style="font-weight: bold">MAX HYPE!</span>
-        <br />
-        <div class="hype-meter">
-          <div
-            class="hype-fill"
-            :style="'width: ' + (hypeAmount / 200) * 100 + '%'"
-            :class="hypeMax ? 'hype-max' : ''"
-          ></div>
+        <div v-if="!gameStart && !preStart">
+          <button class="button" @click="preStartGame">READY?</button
+          ><br /><br />
+          Click the flower the bee is indicating via dance<br /><br />
         </div>
-        <router-link to="/Menu">Quit</router-link>
+        <div v-if="gameStart && !gameOver">
+          SCORE: {{ score }}<br /><br />
+          COMBO: <span :style="comboStyle">{{ combo }}</span> <br /><br />
+          <span v-if="!hypeMax">Hype meter</span>
+          <span v-if="hypeMax" style="font-weight: bold">MAX HYPE!</span>
+          <br />
+          <div class="hype-meter">
+            <div
+              class="hype-fill"
+              :style="'width: ' + (hypeAmount / 200) * 100 + '%'"
+              :class="hypeMax ? 'hype-max' : ''"
+            ></div>
+          </div>
+        </div>
+        <router-link to="/Menu" class="button">Quit</router-link>
       </div>
     </div>
   </div>
@@ -51,20 +75,25 @@ export default {
       maxRange: 5,
       minRange: 1,
       flowerTypes: ["lilac", "rose", "daisy", "tulip", "sunflower"],
+      score: 0,
       hypeAmount: 0,
       hypeCounter: 0,
       hypeMax: false,
       combo: 0,
       highestCombo: 0,
       activeIndicator: "",
+      gameStart: false,
+      timer: 185,
+      timerHolder: 0,
+      preStart: false,
+      preStartText: "",
+      preStartCountdown: 0,
+      gameOver: false,
     };
   },
   created() {
-    this.flowerLocations = this.generateFlowers(this.flowerAmount);
-    this.chosenFlower = this.chooseFlower();
-    soundHandler.playSound("game1");
-
     EventBus.$on("resetGame", (reset) => {
+      this.score++;
       if (!this.hypeMax) {
         this.flowerAmount += 2;
         if (this.flowerAmount > 60) {
@@ -79,7 +108,7 @@ export default {
       if (this.hypeAmount > 200) {
         this.hypeAmount = 200;
         if (!this.hypeMax) {
-          soundHandler.playSound('maxhype')
+          soundHandler.playSound("maxhype");
           this.hypeMax = true;
           let self = this;
           setTimeout(() => {
@@ -93,12 +122,12 @@ export default {
       this.chosenFlower = this.chooseFlower();
       this.activeIndicator = "";
       this.activeIndicator = "correct";
-      let rand = Math.floor(Math.random() * 3) + 1
-      soundHandler.playSound('correct' + rand)
+      let rand = Math.floor(Math.random() * 3) + 1;
+      soundHandler.playSound("correct" + rand);
     });
 
     EventBus.$on("incorrect", (reset) => {
-      this.hypeAmount -= 10;
+      this.hypeAmount -= 30;
       if (this.hypeAmount < 0) {
         this.hypeAmount = 0;
       }
@@ -109,8 +138,13 @@ export default {
       }
       this.activeIndicator = "";
       this.activeIndicator = "incorrect";
-      let rand = Math.floor(Math.random() * 2) + 1
-      soundHandler.playSound('incorrect' + rand)
+      let rand = Math.floor(Math.random() * 2) + 1;
+      soundHandler.playSound("incorrect" + rand);
+    });
+    EventBus.$on("soundEnd", (sound) => {
+      if (sound === "game1") {
+        soundHandler.fadeInSound("gameover");
+      }
     });
   },
   computed: {
@@ -127,6 +161,11 @@ export default {
       if (this.combo >= 3) {
         return "font-weight: bold";
       }
+    },
+    timeLeftMinutes() {
+      let minutes = Math.floor(this.timer / 60);
+      let seconds = this.timer % 60;
+      return `${minutes}:${this.padTo2Digits(seconds)}`;
     },
   },
   methods: {
@@ -173,8 +212,55 @@ export default {
         self.hypeAmount -= 2;
       }
     },
+    padTo2Digits(num) {
+      return num.toString().padStart(2, "0");
+    },
+    preStartGame() {
+      soundHandler.playSound("game1");
+      this.preStart = true;
+      this.preStartGameTwo();
+    },
+    preStartGameTwo() {
+      this.preStartText = "";
+      this.preStartCountdown++;
+      let self = this;
+      setTimeout(() => {
+        if (self.preStartCountdown === 4) {
+          self.preStartText = "Go!";
+        } else {
+          self.preStartText = self.preStartCountdown;
+        }
+        setTimeout(() => {
+          if (self.preStartCountdown < 4) {
+            self.preStartGameTwo();
+          } else {
+            self.preStartText = "";
+            self.startGame();
+          }
+        }, 1000);
+      }, 1);
+    },
+    startGame() {
+      this.preStart = false;
+      this.flowerLocations = this.generateFlowers(this.flowerAmount);
+      this.chosenFlower = this.chooseFlower();
+      this.gameStart = true;
+      EventBus.$emit("startGame");
+      let self = this;
+      this.timerHolder = setInterval(() => {
+        self.timer--;
+        if (self.timer === 0) {
+          self.endGame();
+        }
+      }, 1000);
+    },
+    endGame() {
+      clearInterval(this.timerHolder);
+      this.gameOver = true;
+    },
   },
   mounted() {
+    soundHandler.fadeOutSound("menus");
     let self = this;
     this.hypeCounter = setInterval(() => {
       if (!self.hypeMax) {
@@ -184,9 +270,12 @@ export default {
   },
   beforeDestroy() {
     clearInterval(this.hypeCounter);
+    clearInterval(this.timerHolder);
     EventBus.$off("resetGame");
     EventBus.$off("incorrect");
-    soundHandler.stopSound('game1');
+    EventBus.$off("soundEnd");
+    soundHandler.fadeOutSound("game1");
+    soundHandler.fadeOutSound("gameover");
   },
 };
 </script>
@@ -208,6 +297,7 @@ export default {
   margin-bottom: 20px;
   display: flex;
   flex-direction: row;
+  position: relative;
 }
 .left-content,
 .right-content {
@@ -216,6 +306,7 @@ export default {
 }
 .game-footer {
   width: 100%;
+  padding-bottom: 30px;
 }
 
 .hype-meter {
@@ -240,10 +331,79 @@ export default {
   background-color: #00a2ff;
 }
 
+.button {
+  padding: 10px;
+  background-color: black;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-radius: 5px;
+}
+
+.button:hover {
+  background-color: #fdcf04;
+  color: #533b14;
+}
+
+.pre-start,
+.end-game {
+  width: 100%;
+  height: 400px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: all 0.2s;
+  pointer-events: none;
+}
+
+.pre-start-visible,
+.end-game-visible {
+  background-color: rgba(0, 0, 0, 0.6);
+  pointer-events: initial !important;
+}
+
+.pre-start-text {
+  width: 100%;
+  top: 180px;
+  position: relative;
+  margin: 0 auto;
+  color: white;
+  animation: upfade 1s 1;
+  font-size: 30pt;
+  font-weight: bold;
+}
+
+.end-game-text {
+  width: 100%;
+  top: 140px;
+  position: relative;
+  margin: 0 auto;
+  color: white;
+  font-size: 30pt;
+  font-weight: bold;
+}
+
+@keyframes upfade {
+  0% {
+    opacity: 1;
+    top: 180px;
+  }
+  40% {
+    opacity: 1;
+    top: 180px;
+  }
+  100% {
+    opacity: 0;
+    top: 140px;
+  }
+}
+
 @media screen and (max-width: 820px) {
   .game-wrapper {
     width: 100vw;
     justify-content: center;
+    overflow-x: hidden;
   }
   .content-wrapper {
     width: 100%;
@@ -259,6 +419,16 @@ export default {
     float: left;
     justify-content: center;
     margin-bottom: 20px;
+  }
+  .pre-start,
+  .end-game {
+    width: 100%;
+    height: 820px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: all 0.2s;
+    pointer-events: none;
   }
 }
 </style>

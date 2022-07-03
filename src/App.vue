@@ -7,36 +7,67 @@
 </template>
 
 <script>
-import Home from './views/Home'
-import Game from './views/Game'
+import Home from "./views/Home";
+import Game from "./views/Game";
 import soundHandler from "./services/soundHandler.js";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    Home, Game
+    Home,
+    Game,
   },
-  data () {
+  data() {
     return {
-      fader: 'fade'
+      fader: "fade"
+    };
+  },
+  created() {
+    soundHandler.createSound("./static/audio/game1.mp3", "game1", 1, false);
+    soundHandler.createSound("./static/audio/menus.mp3", "menus", 0.6, true);
+    soundHandler.createSound("./static/audio/gameover.mp3", "gameover", 0.6, true);
+    soundHandler.createSound(
+      "./static/audio/incorrect1.mp3",
+      "incorrect1",
+      0.7,
+      false
+    );
+    soundHandler.createSound(
+      "./static/audio/incorrect2.mp3",
+      "incorrect2",
+      0.7,
+      false
+    );
+    soundHandler.createSound(
+      "./static/audio/correct1.mp3",
+      "correct1",
+      0.7,
+      false
+    );
+    soundHandler.createSound(
+      "./static/audio/correct2.mp3",
+      "correct2",
+      0.7,
+      false
+    );
+    soundHandler.createSound(
+      "./static/audio/correct3.mp3",
+      "correct3",
+      0.7,
+      false
+    );
+    soundHandler.createSound("./static/audio/maxhype.mp3", "maxhype", 1, false);
+    if (this.$router.currentRoute.path !== "/") {
+      this.$router.push("/");
     }
   },
-  created () {
-    soundHandler.createSound("./static/audio/game1.mp3", "game1", 1);
-    soundHandler.createSound("./static/audio/incorrect1.mp3", "incorrect1", 0.4);
-    soundHandler.createSound("./static/audio/incorrect2.mp3", "incorrect2", 0.4);
-    soundHandler.createSound("./static/audio/correct1.mp3", "correct1", 0.7);
-    soundHandler.createSound("./static/audio/correct2.mp3", "correct2", 0.7);
-    soundHandler.createSound("./static/audio/correct3.mp3", "correct3", 0.7);
-    soundHandler.createSound("./static/audio/maxhype.mp3", "maxhype", 1);
-  },
   methods: {
-  }
-}
+  },
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -48,7 +79,7 @@ export default {
 }
 
 button {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   border-radius: 5px;

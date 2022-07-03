@@ -85,7 +85,6 @@ export default {
       }
     },
     getIndicatorFeedback() {
-      console.log(this.indicator)
       if (this.indicator === 'correct') {
         return 'feedback-correct'
       } else if (this.indicator === 'incorrect') {

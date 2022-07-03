@@ -2,26 +2,32 @@
   <div id="home">
     <h1>B BOYs</h1>
     <div class="bee-logo-wrapper">
-      <img src="../assets/bee-title.svg" class="bee-logo">
+      <img src="../assets/bee-title.svg" class="bee-logo" />
     </div>
-    <br><br>
-    <button class='button' v-on:click="startGame">START WAGGLING</button>
+    <br /><br />
+    <button class="button" v-on:click="startGame">START WAGGLING</button>
   </div>
 </template>
 
 <script>
+import soundHandler from "../services/soundHandler.js";
 export default {
-  name: 'Home',
-  components: {
+  name: "Home",
+  data() {
+    return {
+    };
   },
-  props: {
-  },
+  components: {},
+  props: {},
   methods: {
     startGame: function () {
-      this.$router.push('Menu')
-    }
-  }
-}
+      this.$router.push("Menu");
+    },
+  },
+  mounted() {
+    soundHandler.fadeOutSound("menus");
+  },
+};
 </script>
 
 <style>
@@ -49,8 +55,8 @@ export default {
 }
 
 .button:hover {
-  background-color: #FDCF04;
-  color: #533B14;
+  background-color: #fdcf04;
+  color: #533b14;
 }
 
 .bee-logo-wrapper {
@@ -67,8 +73,14 @@ export default {
 }
 
 @keyframes updown {
-  0% { top: 0px }
-  50% { top: 40px }
-  100% { top: 0px }
+  0% {
+    top: 0px;
+  }
+  50% {
+    top: 40px;
+  }
+  100% {
+    top: 0px;
+  }
 }
 </style>

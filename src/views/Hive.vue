@@ -20,6 +20,8 @@
           </div>
         </div>
       </div>
+      <div class="box-holder box1"></div>
+      <div class="box-holder box2"></div>
       <div id="boombox">
         <img src="../assets/boomboxshadow.png" class="boombox-image-shadow"/>
         <img src="../assets/boombox.png" class="boombox-image" ref="boombox"/>
@@ -203,7 +205,7 @@ export default {
       return array;
     },
     animateAudienceBee(self) {
-      for (let i = 1; i <= Math.floor(this.hype / 4); i++) {
+      for (let i = 1; i <= Math.floor(this.hype / 7); i++) {
         let audienceMember = self.$refs["audience-" + self.randomBee(self)];
         self.shakeRandomBee(audienceMember);
       }
@@ -235,12 +237,6 @@ export default {
               { rotation: 20 },
               { rotation: -20 },
               { rotation: 20 },
-              { rotation: -20 },
-              { rotation: 20 },
-              { rotation: -20 },
-              { rotation: 20 },
-              { rotation: -20 },
-              { rotation: 20 },
               { rotation: 0 },
             ],
             autoRotate: true,
@@ -249,7 +245,7 @@ export default {
           repeat: 0,
         });
         beeTween.progress(progress);
-        beeTween.duration(2);
+        beeTween.duration(1.8);
       }
 
       createNewTween(bee);
@@ -280,6 +276,10 @@ export default {
       }
 
       createNewTween(boombox);
+    },
+    startGame() {
+      this.generateBeeAnim();
+      this.animateBoombox()
     }
   },
   created() {
@@ -291,18 +291,22 @@ export default {
     })
   },
   mounted() {
-    this.generateBeeAnim();
     this.audience = this.generateBeeAudience(this.audienceAmount);
     let self = this;
     clearInterval(this.audienceAnimate);
     this.audienceAnimate = setInterval(() => {
       self.animateAudienceBee(self);
     }, 600);
-    this.animateBoombox()
+    EventBus.$on('startGame', reset => {
+      setTimeout(() => {
+        self.startGame()
+      }, 1)
+    })
   },
   beforeDestroy() {
     clearInterval(this.audienceAnimate);
     EventBus.$off('resetGame')
+    EventBus.$off('startGame')
   },
 };
 </script>
@@ -394,6 +398,22 @@ export default {
   position: absolute;
   left: 0px;
   opacity: 0.7;
+}
+
+.box-holder {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+}
+.box1 {
+  background: url('../../static/bgs/box1.png');
+  top: 150px;
+  left: 140px;
+}
+.box2 {
+  background: url('../../static/bgs/box2.png');
+  top: 180px;
+  left: 180px;
 }
 
 .dot {

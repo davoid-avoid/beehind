@@ -16,9 +16,11 @@
   "dependencies": {
     "gsap": "^2.1.2",
     "howler": "^2.2.3",
+    "preloadjs": "^1.0.1",
     "vue": "^2.5.2",
     "vue-howler": "^0.7.0",
-    "vue-router": "^3.5.4"
+    "vue-router": "^3.5.4",
+    "yuki-createjs": "^0.0.3"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

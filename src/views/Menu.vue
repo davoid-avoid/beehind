@@ -1,7 +1,10 @@
 <template>
   <div id="menu">
     <h1>Choose mode!</h1>
-    <br /><br />
+    <div class="animate-boombox-holder">
+      <img src="../assets/boomboxmenu.png" class="animate-boombox" />
+    </div>
+    <br />
     <button class="button" v-on:click="startGame1">
       GAME 1 - INTERPRETIVE DANCE
     </button>
@@ -16,6 +19,7 @@
 </template>
 
 <script>
+import soundHandler from "../services/soundHandler.js";
 export default {
   name: "Menu",
   components: {},
@@ -24,6 +28,9 @@ export default {
     startGame1: function () {
       this.$router.push("Game1");
     },
+  },
+  mounted() {
+    soundHandler.fadeInSound("menus");
   },
 };
 </script>
@@ -36,7 +43,7 @@ export default {
 }
 
 @media screen and (max-width: 820px) {
-  #home {
+  #menu {
     justify-content: center;
     text-align: center;
     width: 100vw;
@@ -80,6 +87,33 @@ export default {
   }
   100% {
     top: 0px;
+  }
+}
+.animate-boombox-holder {
+  position: relative;
+  width: 354px;
+  height: 198px;
+  margin: 0 auto;
+}
+
+.animate-boombox {
+  animation: squish 2s infinite;
+  position: relative;
+  margin: 0 auto;
+}
+
+@keyframes squish {
+  0% {
+    top: 0px;
+    height: 198px;
+  }
+  50% {
+    top: 10px;
+    height: 188px;
+  }
+  100% {
+    top: 0px;
+    height: 198px;
   }
 }
 </style>
