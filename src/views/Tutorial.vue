@@ -262,10 +262,7 @@ export default {
           { type: "lilac", distance: 2, angle: 310, identifier: 9 },
         ];
         this.chosenFlower = {};
-        this.chosenFlower =
-          this.flowerLocations[
-            Math.floor(Math.random() * this.flowerLocations.length)
-          ];
+        this.chosenFlower = this.flowerLocations[Math.floor(Math.random() * this.flowerLocations.length)];
       }
       if (step === 8) {
         this.tutorialActive = true;
@@ -282,10 +279,7 @@ export default {
           { type: "lilac", distance: 2, angle: 310, identifier: 9 },
         ];
         this.chosenFlower = {};
-        this.chosenFlower =
-          this.flowerLocations[
-            Math.floor(Math.random() * this.flowerLocations.length)
-          ];
+        this.chosenFlower = this.flowerLocations[Math.floor(Math.random() * this.flowerLocations.length)];
         EventBus.$emit("tutorialCall");
       }
       if (step === 9) {
