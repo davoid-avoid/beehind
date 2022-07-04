@@ -5,6 +5,9 @@
       <div class="content-wrapper">
         <div class="left-content">
           <Hive :flowerInfo="chosenFlower" :hype="hypeAmount" />
+          <div class="waggle-diagram" v-if="tutorialStep === 2">
+            <img src="../assets/waggle.png" />
+          </div>
         </div>
         <div class="right-content">
           <Flowers
@@ -27,33 +30,36 @@
           <a href="https://en.wikipedia.org/wiki/Waggle_dance" target="_blank"
             >'Waggle Dance'</a
           ><br /><br />
-          The direction the bee dances in communicates the direction of the
-          flower in question<br /><br />
+          The dance the bee is doing communicates direction and distance of the flower.<br /><br />
           <button class="button" @click="stepTutorial(2)">Next</button>
         </div>
         <div v-if="tutorialStep === 2">
+          The 'waggle' portion of the dance (indicated in red) is what indicates direction.<br /><br />
+          <button class="button" @click="stepTutorial(3)">Next</button>
+        </div>
+        <div v-if="tutorialStep === 3">
           To win the game, you must select the flower the bee is indicating by
           dancing.<br /><br />
           Try clicking the flower now
         </div>
-        <div v-if="tutorialStep === 3">
+        <div v-if="tutorialStep === 4">
           Great Job!<br /><br />
           Which flower is the bee indicating in this instance?
         </div>
-        <div v-if="tutorialStep === 4">
+        <div v-if="tutorialStep === 5">
           Awesome!<br /><br />
           Now, the distance the bee dances also determines the distance of the
           flower to the hive.<br /><br />
-          <button class="button" @click="stepTutorial(5)">Next</button>
+          <button class="button" @click="stepTutorial(6)">Next</button>
         </div>
-        <div v-if="tutorialStep === 5">
+        <div v-if="tutorialStep === 6">
           Which of the two flowers is the bee indicating?<br /><br />
           Click the flower now
         </div>
-        <div v-if="tutorialStep === 6">
+        <div v-if="tutorialStep === 7">
           How about out of these flowers?<br /><br />
         </div>
-        <div v-if="tutorialStep === 7">
+        <div v-if="tutorialStep === 8">
           That's really all there is to it!<br /><br />
           Try to choose as many correct flowers as possible in the time given.<br><br>
           Build up Hype by selecting correctly as fast as possible. At full hype, you will be given opportunity for big combos.<br><br>
@@ -99,14 +105,14 @@ export default {
   },
   created() {
     EventBus.$on("resetGame", (reset) => {
-      if (this.tutorialStep === 6) {
+      if (this.tutorialStep === 7) {
+        this.stepTutorial(8)
+      } else if (this.tutorialStep === 6) {
         this.stepTutorial(7)
-      } else if (this.tutorialStep === 5) {
-        this.stepTutorial(6)
+      } else if (this.tutorialStep === 4) {
+        this.stepTutorial(5)
       } else if (this.tutorialStep === 3) {
         this.stepTutorial(4)
-      } else if (this.tutorialStep === 2) {
-        this.stepTutorial(3)
       }
     });
   },
@@ -142,10 +148,10 @@ export default {
         this.chosenFlower = this.flowerLocations[0]
         EventBus.$emit('tutorialCall')
       }
-      if (step === 2) {
+      if (step === 3) {
         this.tutorialActive = false
       }
-      if (step === 3) {
+      if (step === 4) {
         this.flowerLocations = [
           { type: 'lilac', distance: 1, angle: 0, identifier: 0 },
           { type: 'rose', distance: 1, angle: 90, identifier: 1 },
@@ -156,7 +162,7 @@ export default {
         this.chosenFlower = this.flowerLocations[3]
         EventBus.$emit('tutorialCall')
       }
-      if (step === 4) {
+      if (step === 5) {
         this.tutorialActive = true
         this.flowerLocations = [
           { type: 'daisy', distance: 1, angle: 90, identifier: 0 },
@@ -167,10 +173,10 @@ export default {
         console.log(this.chosenFlower)
         EventBus.$emit('tutorialCall')
       }
-      if (step === 5) {
+      if (step === 6) {
         this.tutorialActive = false
       }
-      if (step === 6) {
+      if (step === 7) {
         this.flowerLocations = [
           { type: 'lilac', distance: 1, angle: 0, identifier: 0 },
           { type: 'rose', distance: 2, angle: 45, identifier: 1 },
@@ -186,7 +192,7 @@ export default {
         this.chosenFlower = {}
         this.chosenFlower = this.flowerLocations[Math.floor(Math.random() * this.flowerLocations.length)]
       }
-      if (step === 7) {
+      if (step === 8) {
         this.flowerLocations = []
         this.chosenFlower = {}
         EventBus.$emit('tutorialCall')
@@ -323,6 +329,14 @@ export default {
     opacity: 0;
     top: 140px;
   }
+}
+
+.waggle-diagram {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 @media screen and (max-width: 820px) {
