@@ -16,7 +16,7 @@
                 class="flower"
                 v-if="ifHypeMax(flower.identifier)"
                 v-bind:style="{ transform: 'rotate(-' + flower.angle + 'deg)' }"
-                v-bind:class="[flower.type]"
+                v-bind:class="[flower.type, checkIfFlowerHint(flower.type)]"
                 v-on:click="checkFlower(flower.identifier)"
               ></div>
             </div>
@@ -51,6 +51,7 @@ export default {
     chosenFlower: Object,
     hypeMax: Boolean,
     tutorialActive: Boolean,
+    hints: Object
   },
   data() {
     return {
@@ -108,6 +109,17 @@ export default {
         return "";
       }
     },
+    checkIfFlowerHint(type) {
+      if (this.hints.flower) {
+        if (type === this.chosenFlower.type) {
+          return ''
+        } else {
+          return 'half-opacity'
+        }
+      } else {
+        return ''
+      }
+    }
   },
   created() {},
 };
@@ -263,5 +275,9 @@ export default {
     opacity: 0;
     top: 140px;
   }
+}
+
+.half-opacity {
+  opacity: 0.3;
 }
 </style>

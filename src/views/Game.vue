@@ -9,7 +9,7 @@
       </div>
       <div class="content-wrapper">
         <div class="left-content">
-          <Hive :flowerInfo="chosenFlower" :hype="hypeAmount" />
+          <Hive :flowerInfo="chosenFlower" :hype="hypeAmount" :hints="hints" />
         </div>
         <div class="right-content">
           <Flowers
@@ -17,6 +17,7 @@
             :chosenFlower="chosenFlower"
             :hypeMax="hypeMax"
             :tutorialActive="tutorialActive"
+            :hints="hints"
           />
         </div>
         <div :class="['pre-start', preStart ? 'pre-start-visible' : '']">
@@ -50,8 +51,46 @@
               :class="hypeMax ? 'hype-max' : ''"
             ></div>
           </div>
+          <div :style="score > 0 ? '' : 'opacity: 0.2'">
+            Hints
+            <div class="hints-holder">
+              <div
+                :class="[
+                  hints.arrow ? 'disabled-hint' : '',
+                  'arrow-hint-button',
+                  'hint-button',
+                ]"
+                @click="hintCall('arrow')"
+              >
+                <img src="../assets/arrowHintButton.png" />
+              </div>
+              <div
+                :class="[
+                  hints.circle ? 'disabled-hint' : '',
+                  'circle-hint-button',
+                  'hint-button',
+                ]"
+                @click="hintCall('circle')"
+              >
+                <img src="../assets/circleHintButton.png" />
+              </div>
+              <div
+                :class="[
+                  hints.flower ? 'disabled-hint' : '',
+                  'flower-hint-button',
+                  'hint-button',
+                ]"
+                @click="hintCall('flower')"
+              >
+                <img src="../assets/flowerHintButton.png" />
+              </div>
+            </div>
+          </div>
         </div>
-        <router-link to="/Menu" class="button">Quit</router-link>
+        <div>
+          <br />
+          <button class="button" @click="$router.push('/Menu')">Quit</button>
+        </div>
       </div>
     </div>
   </div>
@@ -90,11 +129,19 @@ export default {
       preStartText: "",
       preStartCountdown: 0,
       gameOver: false,
-      tutorialActive: false
+      tutorialActive: false,
+      hints: {
+        arrow: false,
+        circle: false,
+        flower: false,
+      },
     };
   },
   created() {
     EventBus.$on("resetGame", (reset) => {
+      this.hints.arrow = false;
+      this.hints.circle = false;
+      this.hints.flower = false;
       this.score++;
       if (!this.hypeMax) {
         this.flowerAmount += 2;
@@ -260,6 +307,17 @@ export default {
       clearInterval(this.timerHolder);
       this.gameOver = true;
     },
+    hintCall(type) {
+      if (this.score > 0) {
+        if (!this.hints[type]) {
+          this.hints[type] = true;
+          this.score--;
+          if (this.score < 0) {
+            this.score = 0;
+          }
+        }
+      }
+    },
   },
   mounted() {
     soundHandler.fadeOutSound("menus");
@@ -308,7 +366,7 @@ export default {
 }
 .game-footer {
   width: 100%;
-  padding-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 .hype-meter {
@@ -399,6 +457,26 @@ export default {
     opacity: 0;
     top: 140px;
   }
+}
+
+.hints-holder {
+  width: 200px;
+  margin: 0 auto;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.hint-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.disabled-hint {
+  opacity: 0.3;
 }
 
 @media screen and (max-width: 820px) {

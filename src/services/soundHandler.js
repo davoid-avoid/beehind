@@ -9,7 +9,7 @@ const soundHandler = {
       src: [src],
       volume: volume,
       loop: loop,
-      onload: function() { console.log('song loaded!') },
+      onload: function() { EventBus.$emit('soundLoaded') },
       onloaderror: function(id, error) { console.log('loadError: ' + id + ' - ' + error) },
       onend: function() {
         EventBus.$emit('soundEnd', name)

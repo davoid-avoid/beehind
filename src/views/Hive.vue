@@ -26,6 +26,15 @@
         <img src="../assets/boomboxshadow.png" class="boombox-image-shadow"/>
         <img src="../assets/boombox.png" class="boombox-image" ref="boombox"/>
       </div>
+      <div class="arrow-hint" v-if="hints.arrow" v-bind:style="{ transform: 'rotate(' + flowerInfo.angle + 'deg)' }">
+        <img src="../assets/arrowHint.png" />
+      </div>
+      <div class="arrow-hint" v-if="hints.circle" v-bind:style="{ transform: 'rotate(' + flowerInfo.angle + 'deg)' }">
+        <img src="../assets/circleHint1.png" :class="[flowerInfo.distance === 1 ? 'active-circle-hint' : '', 'circle-hint-img']"/>
+        <img src="../assets/circleHint2.png" :class="[flowerInfo.distance === 2 ? 'active-circle-hint' : '', 'circle-hint-img']"/>
+        <img src="../assets/circleHint3.png" :class="[flowerInfo.distance === 3 ? 'active-circle-hint' : '', 'circle-hint-img']" />
+        <img src="../assets/circleHint4.png" :class="[flowerInfo.distance === 4 ? 'active-circle-hint' : '', 'circle-hint-img']" />
+      </div>
       <div
         id="bee-container"
         v-bind:style="{ transform: 'rotate(' + flowerInfo.angle + 'deg)' }"
@@ -54,6 +63,7 @@ export default {
   props: {
     flowerInfo: Object,
     hype: Number,
+    hints: Object
   },
   data() {
     return {
@@ -429,5 +439,22 @@ export default {
   width: 2px;
   height: 2px;
   background: white;
+}
+
+.arrow-hint, circle-hint {
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.circle-hint-img {
+  opacity: 0.3;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.active-circle-hint {
+  opacity: 1 !important;
 }
 </style>
