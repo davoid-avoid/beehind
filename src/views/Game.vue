@@ -365,7 +365,6 @@ export default {
   position: relative;
 }
 .game-footer {
-  width: 100%;
   margin-bottom: 30px;
 }
 

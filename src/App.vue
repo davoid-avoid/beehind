@@ -185,7 +185,7 @@ a {
 }
 
 .loading-bar-backing {
-  width: 400px;
+  width: 300px;
   margin: 0 auto;
   height: 8px;
   background-color: black;
